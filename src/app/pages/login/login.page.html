@@ -1,0 +1,98 @@
+<ion-content [fullscreen]="true" 
+  class="ion-padding">
+  <div class="auth-container">
+
+    <!-- HEADER -->
+   <div class="header-section">
+  <div class="logo-wrapper">
+    <div class="logo-image">
+      <img src="assets/logo.png" style="width: 100px; filter: drop-shadow(0 5px 15px rgba(0,0,0,0.5));">
+    </div>
+    <h1>EVOLIX</h1>
+  </div>
+  <div class="gold-divider"></div>
+  <h2 class="page-title">Connexion</h2>
+</div>
+
+    <!-- FORM -->
+    <div class="form-section">
+
+      <!-- Téléphone avec pays -->
+     <div class="input-group phone-group">
+
+  <div class="country-select" (click)="toggleCountryList()">
+
+    <div class="flag-box">
+      <img [src]="selectedCountry.flag" class="flag">
+    </div>
+
+    <span class="code">{{ selectedCountry.dialCode }}</span>
+
+    <ion-icon name="chevron-down-outline" class="arrow"></ion-icon>
+
+  </div>
+
+  <input 
+    type="tel"
+    [(ngModel)]="phone"
+    placeholder="Votre numéro"
+    (focus)="scrollToInput()"
+  >
+</div>
+
+<!-- LISTE -->
+<div class="country-list" *ngIf="showCountries">
+  <div 
+    class="country-item"
+    *ngFor="let c of countries"
+    (click)="selectCountry(c)"
+  >
+    <img [src]="c.flag" class="flag">
+    <span class="name">{{ c.name }}</span>
+    <span class="code">{{ c.dialCode }}</span>
+  </div>
+</div>
+
+      <!-- LISTE PAYS -->
+      <div class="country-list" *ngIf="showCountries">
+        <div 
+          class="country-item"
+          *ngFor="let c of countries"
+          (click)="selectCountry(c)"
+        >
+          <img [src]="c.flag" class="flag">
+          <span>{{ c.name }}</span>
+          <span class="code">{{ c.dialCode }}</span>
+        </div>
+      </div>
+
+      <!-- PASSWORD -->
+      <div class="input-group">
+        <label>Code</label>
+        <input 
+          type="password"
+          [(ngModel)]="password"
+          placeholder="••••••"
+          (focus)="scrollToInput()"
+        >
+      </div>
+
+      <!-- BUTTON -->
+      <button class="btn-gold-grad" (click)="login()" [disabled]="isLoading">
+        {{ isLoading ? 'Connexion...' : 'SE CONNECTER' }}
+      </button>
+
+      <p class="error-msg" *ngIf="errorMessage">
+        {{ errorMessage }}
+      </p>
+
+      <!-- FOOTER -->
+    <div class="footer-links">
+  <span class="line"></span>
+  <p>Nouveau membre ? <a [routerLink]="['/signin']">S'inscrire</a></p>
+  <span class="line"></span>
+</div>
+
+    </div>
+  </div>
+</ion-content>

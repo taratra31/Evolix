@@ -1,0 +1,157 @@
+<ion-content [fullscreen]="true">
+  <div class="main-container">
+    
+    <div class="header-section">
+      <ion-button fill="clear">
+        <!-- <ion-icon slot="icon-only" name="arrow-back-outline"></ion-icon> -->
+      </ion-button>
+      <div class="header-logo">
+        <img src="assets/logo.png" alt="Logo">
+      </div>
+      <button fill="clear">
+        <!-- <ion-icon name="settings-outline"></ion-icon> -->
+      </button>
+    </div>
+
+    <div class="title-wrapper">
+      <h2 class="page-title">Mon Compte</h2>
+      <div class="gold-gradient-line"></div>
+    </div>
+
+    <div class="profile-card">
+      <div class="profile-main">
+        <div class="avatar-wrapper">
+          <div class="avatar-inner">
+            <ion-icon name="person-outline"></ion-icon>
+          </div>
+          <div class="status-indicator"></div>
+        </div>
+        <div class="user-info">
+          <h3>{{ user?.phone }}</h3>
+          <p>Membre Premium</p>
+        </div>
+      </div>
+      <div class="profile-footer">
+        <span>Inscrit le {{ user?.created_at | date:'dd MMM yyyy' }}</span>
+      </div>
+    </div>
+
+    <div class="balance-card">
+      <div class="glass-overlay"></div>
+      <div class="balance-content">
+        <div class="top-row">
+          <span class="label">Solde disponible</span>
+          <ion-icon name="wallet-outline" class="wallet-icon"></ion-icon>
+        </div>
+        <div class="amount-row">
+          <h2 class="amount-val">{{ user?.solde || 0 | number }}</h2>
+          <span class="currency">CDF</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="action-buttons">
+      <button class="btn-action deposit" (click)="openModal('depot')">
+        <ion-icon name="arrow-down-outline"></ion-icon>
+        DÉPÔT
+      </button>
+      <button class="btn-action withdraw" (click)="openModal('retrait')">
+        <ion-icon name="arrow-up-outline"></ion-icon>
+        RETRAIT
+      </button>
+    </div>
+
+    <div class="wa-container">
+      <a href="https://chat.whatsapp.com/HBoCNMxdpqS2vUey4a9roi" target="_blank" class="wa-card">
+        <div class="wa-left">
+          <div class="wa-icon-box">
+            <ion-icon name="logo-whatsapp"></ion-icon>
+          </div>
+          <div class="wa-text">
+            <span class="wa-title">Groupe Officiel</span>
+            <span class="wa-subtitle">Assistance 24h/7j</span>
+          </div>
+        </div>
+        <ion-icon name="chevron-forward-outline" class="arrow-fade"></ion-icon>
+      </a>
+    </div>
+
+    <div class="section-group">
+      <div class="section-header">
+        <h3>Gestion des Dépôts</h3>
+      </div>
+      
+      <div class="premium-list-container">
+        <div class="nav-row" (click)="goToHistory('recharge')">
+          <div class="nav-left">
+            <div class="nav-icon gold"><ion-icon name="receipt-outline"></ion-icon></div>
+            <span>Historique des recharges</span>
+          </div>
+          <ion-icon name="chevron-forward-outline"></ion-icon>
+        </div>
+
+        <div class="recent-activities" *ngIf="transactions.length > 0">
+          <div class="divider-text">Activités récentes</div>
+          <ng-container *ngFor="let t of transactions">
+            <div class="activity-item" *ngIf="t.type === 'depot'">
+              <div class="item-left">
+                <div class="type-icon in"><ion-icon name="arrow-down-outline"></ion-icon></div>
+                <div class="item-meta">
+                  <span class="item-title">Dépôt</span>
+                  <span class="item-id">{{ t.transaction_id }}</span>
+                </div>
+              </div>
+              <div class="item-right">
+                <span class="item-amount">+{{ t.montant | number }}</span>
+                <div class="status-tag" [ngClass]="t.status">{{ t.status }}</div>
+              </div>
+            </div>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-group">
+      <div class="section-header">
+        <h3>Gestion des Retraits</h3>
+      </div>
+      
+      <div class="premium-list-container">
+        <div class="nav-row" (click)="goToHistory('retrait')">
+          <div class="nav-left">
+            <div class="nav-icon gray"><ion-icon name="pie-chart-outline"></ion-icon></div>
+            <span>Historique des retraits</span>
+          </div>
+          <ion-icon name="chevron-forward-outline"></ion-icon>
+        </div>
+
+        <div class="recent-activities" *ngIf="transactions.length > 0">
+          <div class="divider-text">Activités récentes</div>
+          <ng-container *ngFor="let t of transactions">
+            <div class="activity-item" *ngIf="t.type === 'retrait'">
+              <div class="item-left">
+                <div class="type-icon out"><ion-icon name="arrow-up-outline"></ion-icon></div>
+                <div class="item-meta">
+                  <span class="item-title">Retrait</span>
+                  <span class="item-id">{{ t.user_phone }}</span>
+                </div>
+              </div>
+              <div class="item-right">
+                <span class="item-amount">-{{ t.montant | number }}</span>
+                <div class="status-tag" [ngClass]="t.status">{{ t.status }}</div>
+              </div>
+            </div>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-action">
+      <button class="btn-logout" (click)="logout()">
+        <ion-icon name="log-out-outline"></ion-icon>
+        SE DÉCONNECTER
+      </button>
+    </div>
+
+  </div>
+</ion-content>

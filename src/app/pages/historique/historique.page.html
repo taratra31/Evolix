@@ -1,0 +1,66 @@
+<ion-content [fullscreen]="true">
+  <div class="main-container">
+
+    <div class="top-nav">
+      <button class="btn-back" (click)="goToCompte()">
+        <ion-icon name="arrow-back-outline"></ion-icon>
+      </button>
+      <div class="nav-title">HISTORIQUE</div>
+      <div style="width: 45px;"></div> </div>
+
+    <div class="header-section">
+      <h2 class="page-title">
+        {{ type === 'depot' ? 'Dépôts' : 'Retraits' }}
+      </h2>
+      <div class="gold-line"></div>
+    </div>
+
+    <div *ngIf="transactions.length === 0" class="empty-state">
+      <div class="icon-box">
+        <ion-icon name="receipt-outline"></ion-icon>
+      </div>
+      <p>Aucune transaction enregistrée</p>
+    </div>
+
+    <div class="history-list" *ngIf="transactions.length > 0">
+      <div *ngFor="let t of transactions" class="premium-card">
+        
+        <div class="card-header">
+          <div class="type-indicator" [ngClass]="type">
+            <ion-icon [name]="type === 'depot' ? 'arrow-down-outline' : 'arrow-up-outline'"></ion-icon>
+          </div>
+          <div class="status-badge" [ngClass]="t.status">
+            {{ t.status }}
+          </div>
+        </div>
+
+        <div class="card-body">
+          <div class="info-row main-row">
+            <span class="label">Montant</span>
+            <span class="amount" [ngClass]="type">
+              {{ type === 'depot' ? '+' : '-' }} {{ t.montant | number }} <span>CDF</span>
+            </span>
+          </div>
+
+          <div class="info-row secondary-row" *ngIf="type === 'depot'">
+            <span class="label">ID Transaction</span>
+            <span class="value">{{ t.transaction_id }}</span>
+          </div>
+
+          <div class="info-row secondary-row" *ngIf="type === 'retrait'">
+            <span class="label">Numéro bénéficiaire</span>
+            <span class="value">{{ t.user_phone }}</span>
+          </div>
+        </div>
+
+        <div class="card-footer">
+          <span class="date-text">
+            <ion-icon name="time-outline"></ion-icon>
+            {{ t.created_at | date:'dd MMMM yyyy • HH:mm' }}
+          </span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</ion-content>

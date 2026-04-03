@@ -1,0 +1,53 @@
+<ion-content>
+  <div class="main-wrapper">
+    
+    <div class="header-section">
+      <div class="vip-badge-top">VIP {{ userVIP }}</div>
+      <h2 class="page-title">Centre de Tâches</h2>
+      <p class="subtitle">Votre revenu journalier: <b>{{ calculateDailyRevenue(userVIP) | number }} CDF</b></p>
+    </div>
+
+    <div class="gold-line"></div>
+
+    <div class="daily-checkin-card" [class.claimed]="hasCheckedIn" (click)="checkIn()">
+      <div class="checkin-content">
+        <div class="icon-box pulse-gold">
+          <ion-icon [name]="hasCheckedIn ? 'checkmark-circle-outline' : 'calendar-outline'"></ion-icon>
+        </div>
+        <div class="text-box">
+          <h3>Bonus de Connexion</h3>
+          <p>Cliquez pour réclamer votre cadeau</p>
+        </div>
+        <div class="reward-amount">+{{ dailyBonus | number }} <span>CDF</span></div>
+      </div>
+    </div>
+
+    <div *ngFor="let task of tasks" 
+         class="task-card" 
+         [ngClass]="[task.type + '-task', task.status]">
+      
+      <div class="category-badge" [style.color]="task.color">{{ task.category }}</div>
+      <div class="status-overlay" *ngIf="task.status === 'completed'">VALIDÉ</div>
+
+      <div class="card-content">
+        <div class="card-left">
+          <div class="icon-circle" [style.border-color]="task.color">
+            <ion-icon [name]="task.logo" [style.color]="task.color"></ion-icon>
+          </div>
+          <div class="task-info">
+            <h3>{{ task.title }}</h3>
+            <p>{{ task.desc }}</p>
+          </div>
+        </div>
+
+        <div class="card-right">
+          <div class="price">{{ task.price | number }} <span>CDF</span></div>
+          <button class="btn-action" (click)="claim(task)" [disabled]="task.status === 'completed' || task.status === 'locked'">
+            {{ task.status === 'pending' ? 'RÉVISION' : (task.status === 'available' ? 'RECEVOIR' : 'VERROUILLÉ') }}
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</ion-content>

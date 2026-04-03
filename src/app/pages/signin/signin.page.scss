@@ -1,0 +1,332 @@
+/* Style global de la page */
+ion-content {
+    --background: radial-gradient(circle at center, #2c1f14 0%, #000000 100%);
+    position: relative;
+
+    &::before {
+        content: "";
+        position: absolute;
+        top: 0; left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: url('https://www.transparenttextures.com/patterns/brushed-alum.png');
+        opacity: 0.15;
+        pointer-events: none;
+        z-index: 0;
+    }
+}
+
+.auth-container {
+    background: transparent;
+    min-height: 100%;
+    padding: 60px 25px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: white;
+    position: relative;
+    z-index: 1;
+}
+
+/* SECTION LOGO "MIBIKA" */
+.header-section {
+    text-align: center;
+    width: 100%;
+    margin-bottom: 40px;
+
+    .logo-wrapper {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 15px;
+
+        /* Logo Hexagone en pur CSS */
+        .custom-logo {
+            position: relative;
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, #f3d078 0%, #c19433 100%);
+            clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
+            
+            &::after {
+                content: "E"; 
+                color: #1a140e;
+                font-weight: 900;
+                font-size: 22px;
+            }
+
+            /* Animation de reflet brillant */
+            &::before {
+                content: "";
+                position: absolute;
+                top: 0;
+                left: -100%;
+                width: 50%;
+                height: 100%;
+                background: linear-gradient(to right, transparent, rgba(255,255,255,0.6), transparent);
+                transform: skewX(-25deg);
+                animation: shine 3s infinite;
+            }
+        }
+
+        h1 {
+            font-size: 32px;
+            font-weight: 900;
+            letter-spacing: 4px;
+            margin: 0;
+            background: linear-gradient(to bottom, #f3d078, #c19433);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 2px 5px rgba(0,0,0,0.5));
+        }
+    }
+}
+
+@keyframes shine {
+    0% { left: -100%; }
+    20% { left: 150%; }
+    100% { left: 150%; }
+}
+
+.gold-divider {
+    height: 1px;
+    width: 100%;
+    background: linear-gradient(90deg, transparent, #d4af37, transparent);
+    margin: 20px 0;
+}
+
+.page-title {
+    color: #d4af37;
+    font-size: 16px;
+    font-weight: 300;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+.phone-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Country select */
+.country-select {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+
+    padding: 10px 8px;
+    border-radius: 8px;
+
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(212, 175, 55, 0.25);
+
+    cursor: pointer;
+    transition: 0.3s;
+
+    &:hover {
+        background: rgba(212, 175, 55, 0.08);
+    }
+
+    .flag {
+        width: 20px;
+        height: 14px;
+        border-radius: 2px;
+    }
+
+    .code {
+        color: #f3d078;
+        font-size: 13px;
+        font-weight: 600;
+    }
+
+    ion-icon {
+        color: #f3d078;
+        font-size: 12px;
+    }
+}
+
+/* Dropdown list */
+.country-list {
+    position: absolute;
+    width: 90%;
+    max-height: 200px;
+    overflow-y: auto;
+
+    background: rgba(0, 0, 0, 0.95);
+    border: 1px solid rgba(212, 175, 55, 0.3);
+    border-radius: 10px;
+
+    margin-top: 5px;
+    z-index: 1000;
+
+    backdrop-filter: blur(10px);
+}
+
+.country-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    padding: 10px 12px;
+    cursor: pointer;
+    transition: 0.2s;
+
+    &:hover {
+        background: rgba(212, 175, 55, 0.1);
+    }
+
+    .flag {
+        width: 22px;
+        height: 16px;
+        border-radius: 2px;
+    }
+
+    .code {
+        margin-left: auto;
+        color: #f3d078;
+        font-weight: bold;
+    }
+}
+/* SECTION FORMULAIRE TRANSPARENT */
+.form-section {
+    width: 100%;
+
+    .input-group {
+        /* Fond transparent effet "verre fumé" */
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(212, 175, 55, 0.2);
+        backdrop-filter: blur(8px);
+        border-radius: 12px;
+        margin-bottom: 15px;
+        display: flex;
+        align-items: center;
+        padding: 5px 15px;
+        transition: 0.3s;
+
+        &:focus-within {
+            border-color: #f3d078;
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 0 10px rgba(212, 175, 55, 0.1);
+        }
+
+        label {
+            color: #d4af37;
+            font-size: 12px;
+            min-width: 90px;
+            font-weight: 600;
+            text-transform: uppercase;
+            border-right: 1px solid rgba(212, 175, 55, 0.2);
+            margin-right: 12px;
+            padding-right: 5px;
+        }
+
+        input {
+            background: transparent !important;
+            border: none;
+            color: white;
+            outline: none;
+            width: 100%;
+            padding: 12px 0;
+            font-size: 15px;
+
+            &::placeholder {
+                color: rgba(255, 255, 255, 0.2);
+            }
+        }
+    }
+}
+
+.phone-prefix {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-right: 1px solid rgba(212, 175, 55, 0.2);
+    padding-right: 12px;
+    margin-right: 10px;
+    font-size: 14px;
+    color: #fff;
+    
+    ion-icon {
+        color: #d4af37;
+        font-size: 12px;
+    }
+}
+
+.btn-gold-grad {
+    width: 100%;
+    padding: 18px;
+    margin-top: 25px;
+    border: none;
+    border-radius: 12px;
+    font-weight: 800;
+    font-size: 15px;
+    letter-spacing: 2px;
+    background: linear-gradient(135deg, #f3d078 0%, #c19433 100%);
+    color: #1a140e;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+    text-transform: uppercase;
+    transition: transform 0.2s;
+
+    &:active {
+        transform: scale(0.96);
+    }
+}
+
+.footer-links {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 40px;
+    width: 100%;
+
+    .line {
+        flex: 1;
+        height: 1px;
+        background: rgba(212, 175, 55, 0.15);
+    }
+
+    p {
+        font-size: 13px;
+        color: #999;
+        white-space: nowrap;
+
+        a {
+            color: #d4af37;
+            text-decoration: none;
+            font-weight: 600;
+            margin-left: 5px;
+        }
+    }
+}
+.error-msg {
+  margin-top: 15px;
+  color: #ff4d4d;
+  font-size: 13px;
+  text-align: center;
+  animation: fadeIn 0.3s ease;
+}
+
+.success-msg {
+  margin-top: 15px;
+  color: #4dff88;
+  font-size: 13px;
+  text-align: center;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

@@ -1,0 +1,167 @@
+$gold: #f3d078;
+$border-glass: rgba(243, 208, 120, 0.1);
+
+ion-content {
+  --background: radial-gradient(circle at 50% 0%, #2b1e14 0%, #000000 100%);
+  color: white;
+}
+
+.main-container {
+  padding: 15px 20px 40px;
+}
+
+/* Navigation Header */
+.top-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+
+  .btn-back {
+    width: 45px;
+    height: 45px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid $border-glass;
+    border-radius: 15px;
+    color: $gold;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    &:active { transform: scale(0.9); }
+  }
+
+  .nav-title {
+    font-size: 10px;
+    letter-spacing: 3px;
+    color: #666;
+    font-weight: 800;
+    text-transform: uppercase;
+  }
+}
+
+/* Page Header */
+.header-section {
+  text-align: center;
+  margin-bottom: 30px;
+  .page-title {
+    color: #fff;
+    font-size: 24px;
+    font-weight: 800;
+    margin: 0;
+  }
+  .gold-line {
+    height: 2px;
+    width: 40px;
+    margin: 12px auto;
+    background: $gold;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(243, 208, 120, 0.3);
+  }
+}
+
+/* Premium Card Design */
+.premium-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 24px;
+  padding: 20px;
+  margin-bottom: 18px;
+  position: relative;
+  overflow: hidden;
+
+  .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+
+    .type-indicator {
+      width: 35px;
+      height: 35px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      &.depot { background: rgba(243, 208, 120, 0.1); color: $gold; }
+      &.retrait { background: rgba(255, 255, 255, 0.05); color: #fff; }
+    }
+
+    .status-badge {
+      font-size: 9px;
+      font-weight: 900;
+      text-transform: uppercase;
+      padding: 5px 12px;
+      border-radius: 8px;
+      letter-spacing: 1px;
+      &.pending { background: rgba(255, 193, 7, 0.1); color: #ffc107; }
+      &.accepted { background: rgba(40, 167, 69, 0.1); color: #28a745; }
+    }
+  }
+
+  .info-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    
+    .label {
+      color: #555;
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    &.main-row {
+      margin-bottom: 15px;
+      .amount {
+        font-size: 20px;
+        font-weight: 900;
+        &.depot { color: $gold; }
+        &.retrait { color: white; }
+        span { font-size: 10px; opacity: 0.6; }
+      }
+    }
+
+    &.secondary-row {
+      background: rgba(0,0,0,0.2);
+      padding: 10px 15px;
+      border-radius: 12px;
+      .value {
+        font-size: 13px;
+        font-weight: 600;
+        color: #aaa;
+      }
+    }
+  }
+
+  .card-footer {
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 1px solid rgba(255, 255, 255, 0.02);
+    .date-text {
+      font-size: 11px;
+      color: #444;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 6px;
+      ion-icon { font-size: 14px; }
+    }
+  }
+}
+
+/* Empty State */
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  .icon-box {
+    font-size: 50px;
+    color: rgba(243, 208, 120, 0.1);
+    margin-bottom: 15px;
+  }
+  p {
+    color: #444;
+    font-size: 14px;
+    font-weight: 500;
+  }
+}

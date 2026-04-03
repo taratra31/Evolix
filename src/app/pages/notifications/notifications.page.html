@@ -1,0 +1,41 @@
+<ion-content [fullscreen]="true">
+  <div class="main-wrapper">
+
+    <!-- Header Logo -->
+    <div class="header-logo">
+      <div class="logo-image">
+        <img src="assets/logo.png" alt="Evolix Logo">
+      </div>
+      <h1>EVOLIX</h1>
+    </div>
+
+    <!-- Page Title -->
+    <h2 class="page-title">Notifications</h2>
+    <div class="gold-line"></div>
+
+    <!-- Notifications List -->
+    <div class="notifications-container">
+      <div class="notif-item" *ngFor="let notif of notifications" [ngClass]="{'unread': notif.unread}">
+        <div class="notif-header">
+          <div class="notif-icon" [ngClass]="notif.type">
+            <ion-icon [name]="notif.icon"></ion-icon>
+          </div>
+          <div class="notif-content">
+            <h3>{{ notif.title }}</h3>
+            <p>{{ notif.message }}</p>
+          </div>
+        </div>
+        <div class="notif-time">{{ notif.time }}</div>
+      </div>
+
+      <!-- Empty State -->
+      <div class="empty-state" *ngIf="notifications.length === 0">
+        <div class="empty-icon">
+          <ion-icon name="notifications-off-outline"></ion-icon>
+        </div>
+        <p>Aucune notification pour le moment</p>
+      </div>
+    </div>
+
+  </div>
+</ion-content>

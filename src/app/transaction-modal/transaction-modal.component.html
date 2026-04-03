@@ -1,0 +1,75 @@
+<ion-content>
+  <div class="modal-container">
+    <h2 class="modal-title">
+      {{ type === 'depot' ? 'DÉPÔT / RECHARGE' : 'RETRAIT / RETRAIT' }}
+    </h2>
+    <div class="gold-line"></div>
+
+    <!-- 1. SAFIDY OPERATEUR (Mitovy ho an'ny roa) -->
+    <p class="label-mini">1. Choisir l'opérateur</p>
+    <div class="operator-grid">
+      <div *ngFor="let op of ['orange', 'airtel', 'vodacom']" 
+           class="op-item" 
+           [class.selected]="operateur === op"
+           (click)="selectOperateur(op)">
+        <img [src]="'https://cdn.worldvectorlogo.com/logos/' + (op==='orange'?'orange-1':op) + '.svg'" class="op-logo">
+      </div>
+    </div>
+
+    <!-- ================= SECTION DÉPÔT ================= -->
+    <div *ngIf="type === 'depot' && operateur">
+      <p class="label-mini">2. Envoyer l'argent vers ce numéro :</p>
+      <div class="copy-box">
+        <span class="phone-number">{{ getNumero(operateur) }}</span>
+        <button class="btn-copy-gold" (click)="copyNumber()">
+          <ion-icon name="copy-outline"></ion-icon> COPIER
+        </button>
+      </div>
+
+      <div class="form-inputs">
+        <div class="input-group">
+          <label>Montant envoyé (CDF)</label>
+          <input type="number" [(ngModel)]="montant" placeholder="Ex: 10000">
+        </div>
+        <div class="input-group">
+          <label>ID de la Transaction (Reference)</label>
+          <input type="text" [(ngModel)]="transactionId" placeholder="Entrez l'ID reçu par SMS">
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= SECTION RETRAIT ================= -->
+    <div *ngIf="type === 'retrait' && operateur">
+      <p class="label-mini">2. Infos pour le retrait :</p>
+      <div class="form-inputs">
+        <div class="input-group">
+          <label>Montant à retirer (CDF)</label>
+          <input type="number" [(ngModel)]="montant" placeholder="Ex: 5000">
+        </div>
+        <div class="input-group">
+          <label>Votre numéro {{ operateur | titlecase }}</label>
+          <input type="tel" [(ngModel)]="userPhone" placeholder="Ex: 08XXXXXXXX">
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. BUTTON ACTIONS -->
+    <div class="actions-footer">
+      <!-- Raha Dépôt -->
+      <button *ngIf="type === 'depot'" class="btn-pay" 
+              [disabled]="!operateur || !montant || !transactionId" 
+              (click)="confirm()">
+        <ion-icon name="checkmark-circle-outline"></ion-icon> J'AI PAYÉ
+      </button>
+
+      <!-- Raha Retrait -->
+      <button *ngIf="type === 'retrait'" class="btn-pay" 
+              [disabled]="!operateur || !montant || !userPhone" 
+              (click)="confirm()">
+        <ion-icon name="cash-outline"></ion-icon> CONFIRMER LE RETRAIT
+      </button>
+      
+      <button class="btn-close" (click)="close()">Annuler</button>
+    </div>
+  </div>
+</ion-content>

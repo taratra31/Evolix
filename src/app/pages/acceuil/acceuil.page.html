@@ -1,0 +1,122 @@
+<ion-content [fullscreen]="true" class="home-content">
+  
+  <div class="spotlight"></div>
+
+  <div class="main-wrapper">
+    <div class="dashboard-header">
+      <div class="user-info">
+        <div class="avatar-box">
+          <img src="assets/logo.png" alt="Logo">
+        </div>
+        <div class="text-info">
+          <p class="greeting">Bonjour 👋</p>
+          <h2 class="user-name">Membre Evolix</h2>
+        </div>
+      </div>
+      <div class="notif-badge" (click)="goToNotif()">
+        <ion-icon name="notifications-outline"></ion-icon>
+        <span class="dot"></span>
+      </div>
+    </div>
+
+    <div class="premium-card">
+      <div class="card-bg"></div>
+      <div class="card-content">
+        <div class="top-row">
+          <span class="card-label">SOLDE TOTAL DISPONIBLE</span>
+          <img src="assets/logo.png" class="chip">
+        </div>
+        <h1 class="main-amount">125.000,00 <span>CDF</span></h1>
+        <div class="bottom-row">
+          <div class="stat">
+            <ion-icon name="trending-up-outline"></ion-icon>
+            <span>+2.4% (Aujourd'hui)</span>
+          </div>
+          <div class="wallet-type">Compte Standard</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="quick-actions">
+      <div class="action-item" (click)="goTo('depot')">
+        <div class="icon-circle gold">
+          <ion-icon name="add-outline"></ion-icon>
+        </div>
+        <span>Dépôt</span>
+      </div>
+      <div class="action-item" (click)="goTo('retrait')">
+        <div class="icon-circle blue">
+          <ion-icon name="arrow-down-outline"></ion-icon>
+        </div>
+        <span>Retrait</span>
+      </div>
+      <div class="action-item" (click)="goTo('equipe')">
+        <div class="icon-circle glass">
+          <ion-icon name="people-outline"></ion-icon>
+        </div>
+        <span>Équipe</span>
+      </div>
+      <div class="action-item" (click)="goTo('tache')">
+        <div class="icon-circle glass">
+          <ion-icon name="flash-outline"></ion-icon>
+        </div>
+        <span>Tâches</span>
+      </div>
+    </div>
+
+    <div class="pro-section">
+      <div class="section-header">
+        <h3>Performance Hebdomadaire</h3>
+        <ion-icon name="ellipsis-horizontal"></ion-icon>
+      </div>
+      <div class="glass-card chart-container">
+        <div class="chart-mock">
+          <div class="bar" style="height: 40%"></div>
+          <div class="bar" style="height: 60%"></div>
+          <div class="bar highlight" style="height: 80%"></div>
+          <div class="bar" style="height: 50%"></div>
+          <div class="bar" style="height: 70%"></div>
+          <div class="bar" style="height: 90%"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="pro-section">
+      <div class="section-header">
+        <h3>Tendances du Marché</h3>
+        <span class="view-all">Tout voir</span>
+      </div>
+      
+      <div class="market-list">
+        <div class="market-item">
+          <div class="coin-info">
+            <div class="coin-icon btc">₿</div>
+            <div>
+              <h4>Bitcoin</h4>
+              <p>BTC / CDF</p>
+            </div>
+          </div>
+          <div class="coin-stats">
+            <span class="price">92,400,000</span>
+            <span class="percent positive">+1.85%</span>
+          </div>
+        </div>
+
+        <div class="market-item">
+          <div class="coin-info">
+            <div class="coin-icon eth">Ξ</div>
+            <div>
+              <h4>Ethereum</h4>
+              <p>ETH / CDF</p>
+            </div>
+          </div>
+          <div class="coin-stats">
+            <span class="price">6,200,500</span>
+            <span class="percent positive">+0.92%</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</ion-content>

@@ -1,0 +1,88 @@
+<ion-content [fullscreen]="true">
+  <div class="main-wrapper">
+    
+    <div class="header-logo">
+      <div class="logo-image">
+        <img src="assets/logo.png" alt="Evolix Logo">
+      </div>
+      <h1>EVOLIX</h1>
+    </div>
+
+    <h2 class="page-title">Mon Équipe & Plans</h2>
+    <div class="gold-line"></div>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="icon-circle"><ion-icon name="gift-outline"></ion-icon></div>
+        <p>Commission Totale</p>
+        <h3>{{ totalCommission | number }} <span>FC</span></h3>
+      </div>
+      <div class="stat-card">
+        <div class="icon-circle"><ion-icon name="people-outline"></ion-icon></div>
+        <p>Invitations</p>
+        <h3>{{ totalInvitations }} <span>Pers.</span></h3>
+      </div>
+    </div>
+
+    <div class="referral-box">
+  <p>
+    <ion-icon name="share-social-outline"></ion-icon>
+    Lien d'invitation
+  </p>
+
+  <div class="copy-input-wrapper">
+
+    <div class="link-text">
+      {{ referralLink || 'Chargement du lien...' }}
+    </div>
+  <button 
+  class="btn-copy"
+  [ngClass]="{'copied': isCopied}"
+  (click)="copyLink()"
+>
+  {{ isCopied ? 'COPIÉ ✓' : 'COPIER' }}
+</button>
+
+  </div>
+    </div>
+
+    <div class="section-header">
+      <h3>Détails des Niveaux VIP (1 - 10)</h3>
+    </div>
+
+    <div class="level-list">
+      <div class="level-item" 
+           *ngFor="let vip of vipLevels" 
+           [class.active-vip]="currentVipLvl === vip.lvl"
+           [style.opacity]="vip.status === 'locked' ? '0.5' : '1'"
+           (click)="selectVIP(vip)">
+        
+        <div class="lvl-info">
+          <span class="badge" [ngClass]="vip.status === 'open' ? 'gold' : 'silver'">
+            VIP {{ vip.lvl }}
+          </span>
+          <div>
+            <p class="lvl-title">Invest: {{ vip.invest }} FC</p>
+            <p class="lvl-desc">
+              <ion-icon name="cash-outline" style="vertical-align: middle;"></ion-icon> 
+              Revenu: <b>{{ vip.daily }} FC / jour</b>
+            </p>
+            <p class="lvl-desc" style="color: #888; font-style: italic;">{{ vip.req }}</p>
+          </div>
+        </div>
+
+        <div class="count-wrapper" style="text-align: right;">
+          <div *ngIf="currentVipLvl === vip.lvl" class="active-badge">
+             <ion-icon name="checkmark-circle"></ion-icon> ACTIF
+          </div>
+
+          <span class="count" *ngIf="vip.status === 'open'">{{ vip.monthly }}</span>
+          <span class="count" *ngIf="vip.status === 'locked'" style="padding: 8px 10px;">
+            <ion-icon name="lock-closed-outline"></ion-icon>
+          </span>
+          <p style="font-size: 9px; color: #666; margin: 4px 0 0;" *ngIf="vip.status === 'open'">FC / MOIS</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</ion-content>

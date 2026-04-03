@@ -1,0 +1,209 @@
+ion-content {
+    --background: radial-gradient(circle at top, #2c1f14, #000);
+    font-family: 'Inter', sans-serif;
+}
+
+.header-section {
+    text-align: center;
+    margin-top: 40px;
+    .page-title {
+        color: #f3d078; 
+        font-size: 18px; 
+        text-transform: uppercase; 
+        letter-spacing: 4px;
+        margin-bottom: 5px;
+    }
+    .subtitle {
+        color: #666;
+        font-size: 10px;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+    }
+}
+
+.gold-line {
+    height: 1px; 
+    background: linear-gradient(90deg, transparent, #f3d078, transparent); 
+    margin: 20px 40px 30px;
+    opacity: 0.4;
+}
+
+.task-card {
+    margin: 0 20px 15px; 
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 20px;
+    padding: 20px;
+    position: relative; 
+    overflow: hidden;
+    backdrop-filter: blur(15px);
+    transition: all 0.3s ease;
+
+    &.available { animation: pulse 3s infinite; }
+
+    &.pending {
+        border-color: #f3d078;
+        background: rgba(243, 208, 120, 0.05);
+        .btn-action { background: #333; color: #f3d078; }
+    }
+
+    &.completed {
+        opacity: 0.6;
+        filter: grayscale(0.8);
+        .btn-action { background: #2ecc71 !important; color: #fff; }
+    }
+
+    .category-badge {
+        font-size: 8px;
+        font-weight: 900;
+        letter-spacing: 1px;
+        margin-bottom: 12px;
+    }
+
+    .card-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .card-left {
+        display: flex; 
+        align-items: center; 
+        gap: 15px;
+
+        .icon-circle {
+            width: 48px; 
+            height: 48px; 
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 12px;
+            display: flex;
+            align-items: center; 
+            justify-content: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            ion-icon { font-size: 24px; }
+        }
+
+        .task-info {
+            h3 { color: #fff; font-size: 14px; margin: 0; font-weight: 700; }
+            p { color: #888; font-size: 11px; margin: 4px 0 0; }
+        }
+    }
+
+    .card-right {
+        text-align: right;
+        .price {
+            color: #f3d078; 
+            font-weight: 800; 
+            font-size: 17px; 
+            margin-bottom: 8px;
+            span { font-size: 9px; color: #fff; margin-left: 2px; }
+        }
+        .btn-action {
+            background: linear-gradient(180deg, #f3d078, #c19433);
+            border: none; 
+            padding: 8px 14px; 
+            border-radius: 8px; 
+            font-size: 10px; 
+            font-weight: 800; 
+            color: #1a140e;
+            &:active { transform: scale(0.92); }
+        }
+    }
+
+    .status-overlay {
+        position: absolute;
+        top: 10px;
+        right: -25px;
+        background: #2ecc71;
+        color: #fff;
+        font-size: 8px;
+        padding: 4px 30px;
+        transform: rotate(45deg);
+        font-weight: 900;
+    }
+}
+
+@keyframes pulse {
+    0% { border-color: rgba(243, 208, 120, 0.1); }
+    50% { border-color: rgba(243, 208, 120, 0.4); }
+    100% { border-color: rgba(243, 208, 120, 0.1); }
+}
+// ... Tehirizo ny teo aloha fa ampiana ireto ho an'ny Check-in:
+
+.daily-checkin-card {
+    margin: 0 20px 30px;
+    background: linear-gradient(135deg, rgba(243, 208, 120, 0.2) 0%, rgba(0, 0, 0, 0.4) 100%);
+    border: 1px solid rgba(243, 208, 120, 0.3);
+    border-radius: 20px;
+    padding: 15px 20px;
+    cursor: pointer;
+    transition: 0.3s;
+
+    &:active { transform: scale(0.97); }
+
+    &.claimed {
+        background: rgba(255, 255, 255, 0.05);
+        border-color: rgba(255, 255, 255, 0.1);
+        opacity: 0.8;
+        .icon-box { color: #2ecc71; }
+        .reward-amount { color: #888; }
+    }
+
+    .checkin-content {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+
+        .icon-box {
+            font-size: 30px;
+            color: #f3d078;
+        }
+
+        .text-box {
+            flex: 1;
+            h3 { color: #fff; font-size: 14px; margin: 0; font-weight: 700; }
+            p { color: #ccc; font-size: 10px; margin: 2px 0 0; }
+        }
+
+        .reward-amount {
+            font-weight: 900;
+            color: #f3d078;
+            font-size: 16px;
+            span { font-size: 9px; margin-left: 2px; }
+        }
+    }
+}
+
+// Amboary eto ny vola ho CDF fa tsy FC intsony
+.price {
+    span { color: #fff !important; opacity: 0.7; }
+}
+// ... Tehirizo ny teo aloha fa ampiana ity:
+
+.vip-badge-top {
+    display: inline-block;
+    background: linear-gradient(135deg, #f3d078, #c19433);
+    color: #1a140e;
+    padding: 4px 15px;
+    border-radius: 20px;
+    font-size: 10px;
+    font-weight: 900;
+    margin-bottom: 10px;
+    box-shadow: 0 4px 10px rgba(243, 208, 112, 0.3);
+}
+
+.pulse-gold {
+    animation: iconPulse 2s infinite;
+}
+
+@keyframes iconPulse {
+    0% { transform: scale(1); filter: drop-shadow(0 0 0px #f3d078); }
+    50% { transform: scale(1.1); filter: drop-shadow(0 0 8px #f3d078); }
+    100% { transform: scale(1); filter: drop-shadow(0 0 0px #f3d078); }
+}
+
+.task-card.locked {
+    filter: grayscale(1);
+    opacity: 0.5;
+    .btn-action { background: #555; }
+}

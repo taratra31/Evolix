@@ -1,0 +1,87 @@
+<ion-content [fullscreen]="true" 
+  class="ion-padding">
+  <div class="auth-container">
+    
+    <div class="header-section">
+      <div class="logo-wrapper">
+        <div class="logo-image">
+    <img src="assets/logo.png" style="width: 100px; filter: drop-shadow(0 5px 15px rgba(0,0,0,0.5));">
+  </div>
+        <h1>EVOLIX</h1>
+      </div>
+      <div class="gold-divider"></div>
+      <h2 class="page-title">Inscription</h2>
+    </div>
+
+    <div class="form-section">
+      
+      <!-- Téléphone -->
+      <div class="input-group phone-group">
+
+        <div class="country-select" (click)="toggleCountryList()">
+          <img [src]="selectedCountry.flag" class="flag">
+          <span class="code">{{ selectedCountry.dialCode }}</span>
+          <ion-icon name="chevron-down-outline"></ion-icon>
+        </div>
+
+        <input 
+          type="tel" 
+          placeholder="Votre numéro de téléphone"
+          [(ngModel)]="phone"
+          (focus)="scrollToInput()"
+        >
+      </div>
+
+      <!-- Liste pays -->
+      <div class="country-list" *ngIf="showCountries">
+        <div 
+          class="country-item"
+          *ngFor="let c of countries"
+          (click)="selectCountry(c)"
+        >
+          <img [src]="c.flag" class="flag">
+          <span>{{ c.name }}</span>
+          <span class="code">{{ c.dialCode }}</span>
+        </div>
+      </div>
+
+      <!-- Mot de passe -->
+      <div class="input-group">
+        <label>Code</label>
+        <input type="password" [(ngModel)]="password" placeholder="••••••" (focus)="scrollToInput()">
+      </div>
+
+      <!-- Confirmation -->
+      <div class="input-group">
+        <label>Confirmer</label>
+        <input type="password" [(ngModel)]="confirmPassword" placeholder="••••••" (focus)="scrollToInput()">
+      </div>
+
+      <!-- Parrain -->
+      <div class="input-group">
+        <label>Parrain</label>
+        <input type="text" [(ngModel)]="referral" placeholder="Entrez le code" (focus)="scrollToInput()">
+      </div>
+
+      <!-- Button -->
+       <button class="btn-gold-grad" (click)="register()" [disabled]="isLoading">
+  {{ isLoading ? 'Chargement...' : "S'INSCRIRE" }}
+</button>
+
+<p class="error-msg" *ngIf="errorMessage">
+  {{ errorMessage }}
+</p>
+
+<p class="success-msg" *ngIf="successMessage">
+  {{ successMessage }}
+</p>
+
+      <div class="footer-links">
+  <span class="line"></span>
+  <p>Déjà un compte ? <a [routerLink]="['/login']">Se connecter</a></p>
+  <span class="line"></span>
+</div>
+
+    </div>
+  </div>
+</ion-content>
