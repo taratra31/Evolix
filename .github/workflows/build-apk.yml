@@ -19,6 +19,11 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+        with:
+          packages: 'platforms;android-34 build-tools;34.0.0 cmdline-tools;latest'
+
       - name: Install dependencies
         run: |
           npm install -g @ionic/cli
@@ -31,24 +36,24 @@ jobs:
 
       - name: Generate Assets (Logo/Icon)
         run: npx capacitor-assets generate --android
-        continue-on-error: true  # Raha tsy misy dossier 'resources' dia tsy hijanona ny build
+        continue-on-error: true
 
-      - name: Build APK with Stacktrace
+      - name: Verify Android Project
+        run: |
+          echo "=== Gradle Version ==="
+          cd android && ./gradlew --version
+          echo "=== Installed SDK ==="
+          $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager --list | grep "platforms;android"
+
+      - name: Build APK
         run: |
           cd android
           chmod +x ./gradlew
-          ./gradlew assembleDebug --stacktrace --no-daemon -Dorg.gradle.jvmargs="-Xmx2048m -XX:+HeapDumpOnOutOfMemoryError"
-        env:
-          GRADLE_OPTS: "-Dorg.gradle.daemon=false"
-
-      - name: List APK files (Debug)
-        run: |
-          echo "Mitady APK ao amin'ny:"
-          find android/app/build/outputs -name "*.apk" 2>/dev/null || echo "Tsy nahita APK"
+          ./gradlew assembleDebug --stacktrace --no-daemon
 
       - name: Upload APK to Artifacts
         uses: actions/upload-artifact@v4
         with:
           name: EVOLIX-APK
-          path: android/app/build/outputs/apk/**/*.apk  # Mitady APK na aiza na aiza ao anaty
-          if-no-files-found: error  # Hanao erreur raha tsy misy APK
+          path: android/app/build/outputs/apk/**/*.apk
+          if-no-files-found: error
