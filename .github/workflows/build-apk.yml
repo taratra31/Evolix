@@ -1,11 +1,11 @@
-name: Build Android APK EVOLIX
+name: Build EVOLIX APK
 on: push
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout source
+      - name: Checkout code
         uses: actions/checkout@v4
 
       - name: Setup Node.js
@@ -19,41 +19,35 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Setup Android SDK
-        uses: android-actions/setup-android@v3
-        with:
-          packages: 'platforms;android-34 build-tools;34.0.0 cmdline-tools;latest'
-
-      - name: Install dependencies
+      - name: Install Ionic & Dependencies
         run: |
-          npm install -g @ionic/cli
+          npm install -g @ionic/cli @capacitor/cli @capacitor/android
           npm install
 
-      - name: Build Ionic App and Sync Android
+      - name: Build Web App
+        run: ionic build --prod
+
+      - name: Add Android Platform (RAHA TSY MISY)
         run: |
-          ionic build --prod
+          npx cap add android
           npx cap sync android
 
-      - name: Generate Assets (Logo/Icon)
+      - name: Generate Assets
         run: npx capacitor-assets generate --android
         continue-on-error: true
-
-      - name: Verify Android Project
-        run: |
-          echo "=== Gradle Version ==="
-          cd android && ./gradlew --version
-          echo "=== Installed SDK ==="
-          $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager --list | grep "platforms;android"
 
       - name: Build APK
         run: |
           cd android
           chmod +x ./gradlew
-          ./gradlew assembleDebug --stacktrace --no-daemon
+          ./gradlew assembleDebug --no-daemon --stacktrace
+        env:
+          ANDROID_HOME: /usr/local/lib/android/sdk
+          ANDROID_SDK_ROOT: /usr/local/lib/android/sdk
 
-      - name: Upload APK to Artifacts
+      - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: EVOLIX-APK
-          path: android/app/build/outputs/apk/**/*.apk
+          path: android/app/build/outputs/apk/debug/*.apk
           if-no-files-found: error
