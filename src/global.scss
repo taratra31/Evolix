@@ -1,12 +1,6 @@
 /*
  * App Global CSS
  * ----------------------------------------------------------------------------
- * Put style rules here that you want to apply globally. These styles are for
- * the entire app and not just one component. Additionally, this file can be
- * used as an entry point to import other CSS/Sass files to be included in the
- * output CSS.
- * For more information on global stylesheets, visit the documentation:
- * https://ionicframework.com/docs/layout/global-stylesheets
  */
 
 /* Core CSS required for Ionic components to work properly */
@@ -27,26 +21,16 @@
 
 /**
  * Ionic Dark Mode
- * -----------------------------------------------------
- * For more info, please see:
- * https://ionicframework.com/docs/theming/dark-mode
  */
-
-/* @import "@ionic/angular/css/palettes/dark.always.css"; */
-/* @import "@ionic/angular/css/palettes/dark.class.css"; */
-/* ... (ireo @import rehetra teo aloha teo ambony avelao eo foana) ... */
-
-// ... (ireo @import rehetra avelao eo foana) ...
-
 @import '@ionic/angular/css/palettes/dark.system.css';
 
 /* ================================================ */
-/* 🎯 FANAMBOARANA SAFE AREA 60px (PRO FIX) */
+/* 🎯 SAFE AREA 80px (PRO FIX) */
 /* ================================================ */
 
 :root {
-  --ion-safe-area-top: 60px;  /* 🔥 Fanerena mivantana 60px */
-  --ion-safe-area-bottom: env(safe-area-inset-bottom, 0px);
+  --ion-safe-area-top: 80px;        /* 80px ambony */
+  --ion-safe-area-bottom: env(safe-area-inset-bottom, 20px);
   --ion-safe-area-start: env(safe-area-inset-start, 0px);
   --ion-safe-area-end: env(safe-area-inset-end, 0px);
 }
@@ -57,17 +41,21 @@ html, body {
   width: 100% !important;
   margin: 0 !important;
   padding: 0 !important;
-  background-color: #000000;
 }
 
-/* 🔥 ZAVA-DEHIBE: Manampy padding 60px amin'ny atiny rehetra */
+/* 🔥 ZAVA-DEHIBE: Manampy padding 80px amin'ny atiny rehetra */
 ion-content {
-  --padding-top: 60px !important;
+  --padding-top: 80px !important;
   --padding-bottom: 20px !important;
   --padding-start: 16px !important;
   --padding-end: 16px !important;
-  --offset-top: 60px !important;  /* Ho an'ny scroll */
+  --offset-top: 80px !important;
   --offset-bottom: 0px !important;
+}
+
+/* Ho an'ny scroll content */
+ion-content::part(scroll) {
+  padding-top: 80px !important;
 }
 
 /* Ho an'ny header raha misy */
@@ -76,19 +64,29 @@ ion-header {
 }
 
 ion-header ion-toolbar:first-of-type {
-  padding-top: 60px !important;
+  padding-top: 80px !important;
   margin-top: 0 !important;
+}
+
+/* Ho an'ny page tsirairay */
+ion-page {
+  --padding-top: 80px !important;
+}
+
+/* Ho an'ny modal */
+ion-modal {
+  --padding-top: 80px !important;
+}
+
+/* Ho an'ny popover */
+ion-popover {
+  --padding-top: 80px !important;
 }
 
 /* Ho an'ny tab bar ambany */
 ion-tab-bar {
   padding-bottom: var(--ion-safe-area-bottom, 20px) !important;
   margin-bottom: 0 !important;
-}
-
-/* Ho an'ny page tsirairay */
-ion-page {
-  --padding-top: 60px !important;
 }
 
 /* Mba tsy hanampy padding fanampiny ny Ionic */
@@ -103,10 +101,17 @@ ion-tabs {
   -webkit-tap-highlight-color: transparent;
 }
 
+/* Spacer ho an'ny page tsy mampiasa ion-content */
+.page-container {
+  padding-top: 80px !important;
+  min-height: 100vh;
+}
+
 /* ------------------------------------------------- */
-/* Ireo style hafa anao (custom-toast, custom-alert) */
+/* STYLE FANAMPINY HO AN'NY APP */
 /* ------------------------------------------------- */
 
+/* Toast custom */
 .custom-toast {
   --background: rgba(0, 0, 0, 0.9);
   --border-radius: 16px;
@@ -119,6 +124,7 @@ ion-tabs {
   }
 }
 
+/* Alert custom */
 .custom-alert {
   --background: rgba(20, 20, 28, 0.95);
   --backdrop-opacity: 0.7;
@@ -146,4 +152,33 @@ ion-tabs {
     color: #f3d078;
     font-weight: 600;
   }
+}
+
+/* Scrollbar soso-kevitra */
+::-webkit-scrollbar {
+  width: 4px;
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(243, 208, 120, 0.5);
+  border-radius: 10px;
+}
+/* ================================================ */
+/* 🔥 FANAMPINY FARANY HO AN'NY TABS SY SCROLL */
+/* ================================================ */
+
+/* Fanerena ny scroll ho an'ny page misy tabs */
+ion-router-outlet + ion-tabs ion-content {
+  --padding-bottom: 130px !important;
+}
+
+/* Ataovy azo antoka fa misy toerana ambany */
+ion-content::part(scroll) {
+  padding-bottom: 100px !important;
+}
+
+/* Esory ny overflow hidden mety hanakana */
+ion-content .inner-scroll {
+  overflow-y: auto !important;
 }

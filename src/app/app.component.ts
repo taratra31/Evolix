@@ -25,20 +25,30 @@ export class AppComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.platform.ready().then(async () => {
       
-      /* --- 🔥 FANAMBOARANA STATUS BAR (PRO 60px) --- */
+      /* --- 🔥 FANAMBOARANA STATUS BAR (PRO 80px) --- */
       try {
-        // 🔥 ZAVA-DEHIBE: overlay: true = ny CSS no mifehy ny padding (60px)
-        // Raha overlay: false = ny StatusBar no manery padding kely (tsy mety)
+        // 🔥 overlay: true = ny CSS no mifehy ny padding (80px)
         await StatusBar.setOverlaysWebView({ overlay: true });
         
-        // Ataovy maivana ny soratry ny StatusBar (ora, batterie) 
-        // satria mainty ny background-n'ny app
+        // Ataovy maivana ny soratry ny StatusBar (ora, batterie)
         await StatusBar.setStyle({ style: Style.Light });
         
         // Ataovy mainty ny lokon'ny bar any ambony
         await StatusBar.setBackgroundColor({ color: '#000000' });
         
-        console.log('✅ StatusBar: overlay=true (CSS padding 60px no mifehy)');
+        // 🔥 Fanerena mivantana ny padding 80px
+        document.documentElement.style.setProperty('--ion-safe-area-top', '80px');
+        
+        // Manery ny ion-content rehetra
+        setTimeout(() => {
+          const contents = document.querySelectorAll('ion-content');
+          contents.forEach((content: any) => {
+            content.style.setProperty('--padding-top', '80px');
+            content.style.setProperty('--offset-top', '80px');
+          });
+        }, 100);
+        
+        console.log('✅ StatusBar: overlay=true, padding top = 80px');
       } catch (e) {
         console.log('⚠️ StatusBar non disponible sur web browser');
       }
@@ -143,4 +153,4 @@ export class AppComponent implements OnInit, OnDestroy {
   async showToast(message: string, color: string) {
     console.log(message);
   }
-} 
+}

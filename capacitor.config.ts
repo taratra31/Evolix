@@ -6,10 +6,18 @@ const config: CapacitorConfig = {
   webDir: 'www',
   plugins: {
     Keyboard: {
-      resize: 'none', // Ovaina 'none' mba tsy hanosika ny content mihitsy
-      style: 'dark',         
-      resizeOnFullScreen: false // Ataovy false mba tsy hisy espace fotsy
+      resize: 'none',
+      style: 'dark',
+      resizeOnFullScreen: false
+    },
+    StatusBar: {
+      overlaysWebView: true,
+      style: 'LIGHT',
+      backgroundColor: '#000000'
     }
+  },
+  android: {
+    allowMixedContent: true
   }
 };
 

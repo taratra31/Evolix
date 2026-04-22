@@ -103,3 +103,23 @@ ion-tab-bar {
   --border: 0;
   contain: none;
 }
+/* ================================================ */
+/* 🔥 FANAMPINY HO AN'NY SAFE AREA SY Z-INDEX */
+/* ================================================ */
+
+/* Ataovy ambony ny z-index mba tsy ho voasarona */
+.premium-tab-bar {
+  z-index: 1000;
+}
+
+/* Ho an'ny finday misy gesture bar (navigation bar) */
+@supports (padding-bottom: env(safe-area-inset-bottom)) {
+  .premium-tab-bar {
+    bottom: max(20px, env(safe-area-inset-bottom));
+  }
+}
+
+/* Fanampiana ho an'ny Android gesture navigation */
+.plt-android .premium-tab-bar {
+  bottom: 25px;
+}

@@ -19,10 +19,16 @@ jobs:
           distribution: 'temurin'
           java-version: '21'
 
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+        with:
+          cmdline-tools-version: 11076708
+
       - name: Install Dependencies
         run: |
           npm install -g @ionic/cli @capacitor/cli @capacitor/android
           npm install
+          npm install @capacitor/status-bar
 
       - name: Build Ionic App
         run: ionic build --prod
@@ -33,18 +39,59 @@ jobs:
           npx cap add android
           npx cap sync android
 
-      # 🔥 Mamorona icon avy amin'ny assets/logo.png
-      - name: Generate App Icons
+      # 🔥 Mamorona icon sy splash screen avy amin'ny logo.png
+      - name: Generate App Icons and Splash
         run: |
+          # Mamorona folder resources
           mkdir -p resources
+          
+          # Jereo raha misy logo.png
           if [ -f "src/assets/logo.png" ]; then
             cp src/assets/logo.png resources/icon.png
-            echo "✅ Logo hitako, adika any resources/icon.png"
+            cp src/assets/logo.png resources/splash.png
+            echo "✅ Logo hitako ao src/assets/logo.png"
+          elif [ -f "src/assets/icon.png" ]; then
+            cp src/assets/icon.png resources/icon.png
+            cp src/assets/icon.png resources/splash.png
+            echo "✅ Icon hitako ao src/assets/icon.png"
           else
-            echo "⚠️ Tsy misy logo.png ao amin'ny src/assets/"
+            echo "⚠️ Tsy misy logo! Mamorona default icon..."
+            # Mamorona default icon amin'ny alalan'ny convert (raha misy ImageMagick)
+            # Raha tsy misy dia mampiasa base64 image
+            echo "iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAABhGlDQ1BJQ0MgcHJvZmlsZQAAKJF9kT1Iw0AcxV9TpUUqDnYQcchQnSyIijhKFYtgobQVWnUwufQLmjQkKS6OgmvBwY/FqoOLs64OroIg+AHi5uak6CIl/i8ptIjx4Lgf7+497t4BQr3MNKtrAtB020wl4mImuyoGXxFBH/oxgFmJ2cacJBUReY+1ewiI93GW5l/xuZRYpRgUEBEjBzHDsoO3iWcObDrlfeIwK0pK8TnxmEEXIj9yXXb5jXPeYcHPEsw0s8wScUSsFjpY6WBWMTXiKeKIrOmUz4uOWpw3OauVGqudk79wmLM7q1yuaj2COCaxhCQihGmDKiqwEKNdI8VCis7jPv5B1y+SSyFXCYwcC6hAg+z6wf/gd7dWYWLcSwrHgO4Xx/kYArq2gGbVcb6PHad5AgSfgSu95a/UgZkP0pstLXYEjG0DF9ctTdkDLneAoSeGZMqO5KcpFALA+xl9Uw4YvAUGV73eWvs4fQAy1FXyBjg4BEaKlL3m8e7O9t7+PdPs7wdH9HLr/ugM8AAAAAlwSFlzAAAuIwAALiMBeKU/dgAAAAd0SU1FB+cIBwQMLgJhO9oAAAAZdEVYdENvbW1lbnQAQ3JlYXRlZCB3aXRoIEdJTVBXgQ4XAAAAJXRFWHRkYXRlOmNyZWF0ZQAyMDIzLTA4LTA3VDA0OjEyOjQ2KzAwOjAwtpL8RAAAACV0RVh0ZGF0ZTptb2RpZnkAMjAyMy0wOC0wN1QwNDoxMjo0NiswMDowMGKHK9IAAAAZdEVYdFNvZnR3YXJlAEdJTVAgMi4xMC4zNkRlbXG45zOqAAAAAElFTkSuQmCC" | base64 -d > resources/icon.png
+            cp resources/icon.png resources/splash.png
           fi
+          
+          # Mampiasa cordova-res hamoronana ny sary rehetra
           npm install -g cordova-res
-          cordova-res android --skip-config --copy --icon-source resources/icon.png 2>/dev/null || echo "Nampiasa default icon"
+          cordova-res android --skip-config --copy || echo "⚠️ cordova-res tsy nety, manao manual"
+          
+          # Raha cordova-res tsy nety, dia manao copy manual ny icon ho an'ny Android
+          if [ ! -f "android/app/src/main/res/mipmap-hdpi/ic_launcher.png" ]; then
+            echo "📱 Manao copy manual ny icon..."
+            mkdir -p android/app/src/main/res/mipmap-hdpi
+            mkdir -p android/app/src/main/res/mipmap-mdpi
+            mkdir -p android/app/src/main/res/mipmap-xhdpi
+            mkdir -p android/app/src/main/res/mipmap-xxhdpi
+            mkdir -p android/app/src/main/res/mipmap-xxxhdpi
+            
+            # Raha misy ImageMagick dia resize, raha tsy misy dia copy fotsiny
+            if command -v convert &> /dev/null; then
+              convert resources/icon.png -resize 72x72 android/app/src/main/res/mipmap-hdpi/ic_launcher.png
+              convert resources/icon.png -resize 48x48 android/app/src/main/res/mipmap-mdpi/ic_launcher.png
+              convert resources/icon.png -resize 96x96 android/app/src/main/res/mipmap-xhdpi/ic_launcher.png
+              convert resources/icon.png -resize 144x144 android/app/src/main/res/mipmap-xxhdpi/ic_launcher.png
+              convert resources/icon.png -resize 192x192 android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png
+              echo "✅ Icon noforonina tamin'ny ImageMagick"
+            else
+              cp resources/icon.png android/app/src/main/res/mipmap-hdpi/ic_launcher.png
+              cp resources/icon.png android/app/src/main/res/mipmap-mdpi/ic_launcher.png
+              cp resources/icon.png android/app/src/main/res/mipmap-xhdpi/ic_launcher.png
+              cp resources/icon.png android/app/src/main/res/mipmap-xxhdpi/ic_launcher.png
+              cp resources/icon.png android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png
+              echo "✅ Icon nokopia (tsara fa misy sady)"
+            fi
+          fi
         continue-on-error: true
 
       # 🔥 Manova ny app name ho EVOLIX
@@ -56,9 +103,7 @@ jobs:
       # 🔥 Manova ny anaran'ny APK ao amin'ny build.gradle
       - name: Set APK Name in build.gradle
         run: |
-          # Esory ny archivesBaseName efa misy raha misy
           sed -i '/archivesBaseName/d' android/app/build.gradle
-          # Ampio ny vaovao
           sed -i '/defaultConfig {/a \        archivesBaseName = "EVOLIX"' android/app/build.gradle
           echo "✅ APK name set to EVOLIX"
 
@@ -68,8 +113,8 @@ jobs:
           chmod +x ./gradlew
           ./gradlew assembleDebug --no-daemon
         env:
-          ANDROID_HOME: /usr/local/lib/android/sdk
-          ANDROID_SDK_ROOT: /usr/local/lib/android/sdk
+          ANDROID_HOME: ${{ env.ANDROID_HOME }}
+          ANDROID_SDK_ROOT: ${{ env.ANDROID_HOME }}
 
       # 🔥 Jereo raha misy ilay APK
       - name: Check APK files
@@ -83,35 +128,25 @@ jobs:
       # 🔥 Manova anarana ny APK vokatra
       - name: Rename APK to EVOLIX.apk
         run: |
-          # Jereo raha misy ilay fichier debug
           if [ -f "android/app/build/outputs/apk/debug/app-debug.apk" ]; then
             mv android/app/build/outputs/apk/debug/app-debug.apk android/app/build/outputs/apk/debug/EVOLIX.apk
             echo "✅ Renamed app-debug.apk -> EVOLIX.apk"
-          
-          # Raha EVOLIX mivantana ilay anarana (noho ny archivesBaseName)
           elif [ -f "android/app/build/outputs/apk/debug/EVOLIX-debug.apk" ]; then
             mv android/app/build/outputs/apk/debug/EVOLIX-debug.apk android/app/build/outputs/apk/debug/EVOLIX.apk
             echo "✅ Renamed EVOLIX-debug.apk -> EVOLIX.apk"
-          
-          # Raha release no natao
-          elif [ -f "android/app/build/outputs/apk/release/app-release-unsigned.apk" ]; then
-            mkdir -p android/app/build/outputs/apk/debug/
-            cp android/app/build/outputs/apk/release/app-release-unsigned.apk android/app/build/outputs/apk/debug/EVOLIX.apk
-            echo "✅ Copied release APK -> EVOLIX.apk"
-          
+          elif [ -f "android/app/build/outputs/apk/debug/EVOLIX.apk" ]; then
+            echo "✅ EVOLIX.apk efa misy!"
           else
-            echo "❌ Tsy misy APK hita! Izao no ao anaty dossier:"
+            echo "❌ Tsy misy APK hita!"
             find android/app/build/outputs -type f -name "*.apk" 2>/dev/null
-            echo ""
-            echo "Mila amboarina ny build!"
             exit 1
           fi
         shell: bash
 
-      # 🔥 Upload ny APK (mampiasa wildcard mba tsy ho diso)
+      # 🔥 Upload ny APK
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: EVOLIX-APK
-          path: android/app/build/outputs/apk/debug/EVOLIX.apk
-          if-no-files-found: warn
+          path: android/app/build/outputs/apk/debug/Evolix.apk
+          if-no-files-found: error

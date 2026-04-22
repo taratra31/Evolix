@@ -568,3 +568,34 @@ ion-content {
     color: $gold;
     opacity: 0.7;
 }
+/* ================================================ */
+/* 🔥 FANAMPINY HO AN'NY TABS FLOATING */
+/* ================================================ */
+
+/* Spacer ho an'ny tabs floating - tsy hanarona ny bouton */
+.tabs-spacer {
+    height: 90px;
+    width: 100%;
+}
+
+/* Spacer farany ambany ho an'ny safe area */
+.bottom-safe-spacer {
+    height: 30px;
+    width: 100%;
+}
+
+/* Fanitsiana ny footer action mba tsy hifandona */
+.footer-action {
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+
+/* Fanitsiana ny ion-content mba hanome toerana ambany */
+ion-content {
+    --padding-bottom: 120px !important;
+}
+
+/* Ho an'ny scroll farany ambany */
+.main-container {
+    padding-bottom: 60px;
+}
