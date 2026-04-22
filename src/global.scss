@@ -36,34 +36,77 @@
 /* @import "@ionic/angular/css/palettes/dark.class.css"; */
 /* ... (ireo @import rehetra teo aloha teo ambony avelao eo foana) ... */
 
+// ... (ireo @import rehetra avelao eo foana) ...
+
 @import '@ionic/angular/css/palettes/dark.system.css';
 
-/* ETO NO NANOMBOKA NY FANAMBOARANA */
+/* ================================================ */
+/* 🎯 FANAMBOARANA SAFE AREA 60px (PRO FIX) */
+/* ================================================ */
 
 :root {
---ion-safe-area-top: env(safe-area-inset-top, 20px) !important;
+  --ion-safe-area-top: 60px;  /* 🔥 Fanerena mivantana 60px */
+  --ion-safe-area-bottom: env(safe-area-inset-bottom, 0px);
+  --ion-safe-area-start: env(safe-area-inset-start, 0px);
+  --ion-safe-area-end: env(safe-area-inset-end, 0px);
 }
 
+/* Manerena ny html & body */
 html, body {
   height: 100% !important;
   width: 100% !important;
-  overflow: hidden; /* Mba tsy hihantona ny layout */
-  background-color: #000; /* Mba ho mainty ny ambadika raha misy fotsy mipoitra */
+  margin: 0 !important;
+  padding: 0 !important;
+  background-color: #000000;
 }
 
+/* 🔥 ZAVA-DEHIBE: Manampy padding 60px amin'ny atiny rehetra */
 ion-content {
-  /* Manaisotra ny padding manelingelina rehefa mipoitra ny keyboard */
-  --keyboard-offset: 0px !important;
+  --padding-top: 60px !important;
+  --padding-bottom: 20px !important;
+  --padding-start: 16px !important;
+  --padding-end: 16px !important;
+  --offset-top: 60px !important;  /* Ho an'ny scroll */
   --offset-bottom: 0px !important;
-  height: 100% !important;
 }
 
-/* Esory ilay padding-top: env(...) teo raha io no manoseka ny lohany ho ambany loatra */
+/* Ho an'ny header raha misy */
 ion-header {
-  padding-top: 0px !important; 
+  padding-top: 0px !important;
 }
 
-/* Custom Toast sy Alert (Avelao ireto fa efa mety) */
+ion-header ion-toolbar:first-of-type {
+  padding-top: 60px !important;
+  margin-top: 0 !important;
+}
+
+/* Ho an'ny tab bar ambany */
+ion-tab-bar {
+  padding-bottom: var(--ion-safe-area-bottom, 20px) !important;
+  margin-bottom: 0 !important;
+}
+
+/* Ho an'ny page tsirairay */
+ion-page {
+  --padding-top: 60px !important;
+}
+
+/* Mba tsy hanampy padding fanampiny ny Ionic */
+ion-router-outlet, 
+ion-nav, 
+ion-tabs {
+  --padding-top: 0px !important;
+}
+
+/* Esory ny padding rehetra mety ho avy any an-kafa */
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* ------------------------------------------------- */
+/* Ireo style hafa anao (custom-toast, custom-alert) */
+/* ------------------------------------------------- */
+
 .custom-toast {
   --background: rgba(0, 0, 0, 0.9);
   --border-radius: 16px;

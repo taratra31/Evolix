@@ -15,11 +15,7 @@ import { StatusBar, Style } from '@capacitor/status-bar';
 export class AppComponent implements OnInit, OnDestroy {
   
   private inactivityTimer: any;
-  private readonly INACTIVITY_TIME = 30 * 60 * 1000; // 🔥 30 minitra (ovaina raha tiana)
-  // 5 * 60 * 1000 = 5 minitra
-  // 10 * 60 * 1000 = 10 minitra
-  // 30 * 60 * 1000 = 30 minitra
-  // 60 * 60 * 1000 = 1 ora
+  private readonly INACTIVITY_TIME = 30 * 60 * 1000; // 30 minitra
 
   constructor(
     private router: Router,
@@ -27,23 +23,26 @@ export class AppComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    this.platform.ready().then(async () => { // Nampiana async eto
+    this.platform.ready().then(async () => {
       
-      /* --- FANAMBOARANA STATUS BAR --- */
+      /* --- 🔥 FANAMBOARANA STATUS BAR (PRO 60px) --- */
       try {
-        // Ataovy fotsy ny soratry ny StatusBar (ora, batterie) satria mainty ny app
-        await StatusBar.setStyle({ style: Style.Dark });
+        // 🔥 ZAVA-DEHIBE: overlay: true = ny CSS no mifehy ny padding (60px)
+        // Raha overlay: false = ny StatusBar no manery padding kely (tsy mety)
+        await StatusBar.setOverlaysWebView({ overlay: true });
         
-        // Ity no tena zava-dehibe: 
-        // overlay: false midika hoe "manome toerana" ny StatusBar ka midina kely ny app-nao
-        await StatusBar.setOverlaysWebView({ overlay: false });
+        // Ataovy maivana ny soratry ny StatusBar (ora, batterie) 
+        // satria mainty ny background-n'ny app
+        await StatusBar.setStyle({ style: Style.Light });
         
-        // Raha tiana ho mainty tanteraka ny lokon'ny bar any ambony
+        // Ataovy mainty ny lokon'ny bar any ambony
         await StatusBar.setBackgroundColor({ color: '#000000' });
+        
+        console.log('✅ StatusBar: overlay=true (CSS padding 60px no mifehy)');
       } catch (e) {
-        console.log('StatusBar non disponible sur web browser');
+        console.log('⚠️ StatusBar non disponible sur web browser');
       }
-      /* ------------------------------- */
+      /* -------------------------------------------- */
 
       this.checkSession();
       this.initInactivityTimer();
@@ -56,7 +55,6 @@ export class AppComponent implements OnInit, OnDestroy {
     this.removeEventListeners();
   }
 
-  // 🔥 Jereo raha efa nisy session teo aloha
   checkSession() {
     const userId = localStorage.getItem('userId');
     const sessionExpiry = localStorage.getItem('sessionExpiry');
@@ -64,7 +62,6 @@ export class AppComponent implements OnInit, OnDestroy {
     
     if (userId) {
       if (rememberMe === 'true') {
-        // Session mandrakizay
         this.router.navigateByUrl('/tabs/compte');
       } else if (sessionExpiry) {
         const expiryDate = new Date(sessionExpiry);
@@ -82,7 +79,6 @@ export class AppComponent implements OnInit, OnDestroy {
     }
   }
 
-  // 🔥 Manomboka timer ho an'ny inactivity
   initInactivityTimer() {
     this.clearInactivityTimer();
     this.inactivityTimer = setTimeout(() => {
@@ -90,16 +86,12 @@ export class AppComponent implements OnInit, OnDestroy {
     }, this.INACTIVITY_TIME);
   }
 
-  // 🔥 Mamerina ny timer isaky ny misy hetsika
   resetInactivityTimer() {
-    // Raha tsy mbola login ny utilisateur, aza manao timer
     const userId = localStorage.getItem('userId');
     if (!userId) return;
-    
     this.initInactivityTimer();
   }
 
-  // 🔥 Mivoaka noho ny tsy fahavitrihana
   logoutDueToInactivity() {
     const userId = localStorage.getItem('userId');
     if (userId) {
@@ -110,7 +102,6 @@ export class AppComponent implements OnInit, OnDestroy {
     }
   }
 
-  // 🔥 Manangana event listeners (click, touch, scroll, keypress)
   setupEventListeners() {
     if (typeof window !== 'undefined') {
       window.addEventListener('click', () => this.resetInactivityTimer());
@@ -121,7 +112,6 @@ export class AppComponent implements OnInit, OnDestroy {
     }
   }
 
-  // 🔥 Manala ny event listeners
   removeEventListeners() {
     if (typeof window !== 'undefined') {
       window.removeEventListener('click', () => this.resetInactivityTimer());
@@ -151,7 +141,6 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   async showToast(message: string, color: string) {
-    // Ampidiro ny ToastController raha tiana
     console.log(message);
   }
-}
+} 
