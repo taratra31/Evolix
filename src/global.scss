@@ -36,6 +36,13 @@
 /* @import "@ionic/angular/css/palettes/dark.class.css"; */
 @import '@ionic/angular/css/palettes/dark.system.css';
 /* Custom Toast */
+ion-header {
+  padding-top: env(safe-area-inset-top, 20px);
+}
+
+ion-content {
+  --padding-top: env(safe-area-inset-top, 0px);
+}
 .custom-toast {
   --background: rgba(0, 0, 0, 0.9);
   --border-radius: 16px;
