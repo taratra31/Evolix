@@ -1,39 +1,113 @@
-<ion-content [fullscreen]="true">
+<ion-content [fullscreen]="true" class="notification-content">
+  
+  <!-- Animated Background -->
+  <div class="animated-bg">
+    <div class="gradient-orb orb-1"></div>
+    <div class="gradient-orb orb-2"></div>
+    <div class="gradient-orb orb-3"></div>
+  </div>
+  
+  <!-- Overlay flou -->
+  <div class="blur-overlay"></div>
+  
   <div class="main-wrapper">
 
-    <!-- Header Logo -->
-    <div class="header-logo">
+    <!-- Header Premium -->
+    <div class="header-section">
+      <div class="back-button" (click)="goBack()">
+        <ion-icon name="chevron-back-outline"></ion-icon>
+      </div>
       <div class="logo-image">
         <img src="assets/logo.png" alt="Evolix Logo">
+        <div class="logo-glow"></div>
       </div>
-      <h1>EVOLIX</h1>
+      <div class="title-wrapper">
+        <h1>Notifications</h1>
+        <div class="title-badge" *ngIf="notifications.length > 0">{{ notifications.length }}</div>
+      </div>
+      <div class="clear-all" (click)="deleteAllNotifications()" *ngIf="notifications.length > 0">
+        <ion-icon name="trash-outline"></ion-icon>
+        <div class="tooltip">Tout supprimer</div>
+      </div>
     </div>
 
-    <!-- Page Title -->
-    <h2 class="page-title">Notifications</h2>
-    <div class="gold-line"></div>
+    <div class="gold-line">
+      <div class="gold-line-glow"></div>
+    </div>
 
-    <!-- Notifications List -->
-    <div class="notifications-container">
-      <div class="notif-item" *ngFor="let notif of notifications" [ngClass]="{'unread': notif.unread}">
-        <div class="notif-header">
-          <div class="notif-icon" [ngClass]="notif.type">
-            <ion-icon [name]="notif.icon"></ion-icon>
+    <!-- Pull to refresh indicator -->
+    <div class="refresh-indicator" *ngIf="isRefreshing">
+      <div class="refresh-spinner"></div>
+      <span>Actualisation...</span>
+    </div>
+
+    <!-- Loading State Premium -->
+    <div class="loading-state" *ngIf="isLoading">
+      <div class="loader">
+        <div class="loader-ring"></div>
+        <div class="loader-ring"></div>
+        <div class="loader-ring"></div>
+      </div>
+      <p>Chargement des notifications</p>
+    </div>
+
+    <!-- Notifications List Premium -->
+    <div class="notifications-container" *ngIf="!isLoading">
+      <!-- Date Groups -->
+      <div *ngFor="let group of groupedNotifications" class="date-group">
+        <div class="date-header">
+          <span class="date-text">{{ group.date }}</span>
+          <span class="date-line"></span>
+        </div>
+        
+        <div class="notif-item" *ngFor="let notif of group.items" 
+             [ngClass]="{'unread': notif.unread}"
+             (click)="markAsRead(notif)">
+          
+          <!-- Animated border on unread -->
+          <div class="notif-border" *ngIf="notif.unread"></div>
+          
+          <div class="notif-header">
+            <div class="notif-icon" [ngClass]="notif.type">
+              <div class="icon-pulse"></div>
+              <ion-icon [name]="notif.icon"></ion-icon>
+            </div>
+            <div class="notif-content">
+              <div class="notif-title-row">
+                <h3>{{ notif.title }}</h3>
+                <span class="notif-time">{{ notif.time }}</span>
+              </div>
+              <p>{{ notif.message }}</p>
+              <div class="notif-footer">
+                <div class="notif-badge" [ngClass]="notif.type">
+                  {{ getTypeLabel(notif.type) }}
+                </div>
+              </div>
+            </div>
           </div>
-          <div class="notif-content">
-            <h3>{{ notif.title }}</h3>
-            <p>{{ notif.message }}</p>
+          
+          <div class="notif-actions">
+            <div class="delete-btn" (click)="deleteNotification(notif); $event.stopPropagation()">
+              <ion-icon name="close-outline"></ion-icon>
+            </div>
           </div>
         </div>
-        <div class="notif-time">{{ notif.time }}</div>
       </div>
 
-      <!-- Empty State -->
+      <!-- Empty State Premium -->
       <div class="empty-state" *ngIf="notifications.length === 0">
-        <div class="empty-icon">
-          <ion-icon name="notifications-off-outline"></ion-icon>
+        <div class="empty-animation">
+          <div class="empty-icon">
+            <ion-icon name="notifications-off-outline"></ion-icon>
+            <div class="empty-icon-ring"></div>
+          </div>
         </div>
-        <p>Aucune notification pour le moment</p>
+        <h4>Tranquille pour l'instant</h4>
+        <p>Aucune notification à afficher</p>
+        <button class="restore-btn" (click)="restoreNotifications()">
+          <ion-icon name="refresh-outline"></ion-icon>
+          <span>Restaurer</span>
+        </button>
       </div>
     </div>
 

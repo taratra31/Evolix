@@ -1,0 +1,164 @@
+<ion-content [fullscreen]="true" class="users-content">
+  
+  <div class="users-spotlight"></div>
+
+  <div class="main-wrapper">
+    <!-- Header -->
+    <div class="page-header">
+      <div class="back-navigation">
+        <div class="back-btn" (click)="goBack()">
+          <ion-icon name="arrow-back-outline"></ion-icon>
+          <span>Retour</span>
+        </div>
+        <div class="header-actions">
+          <button class="action-btn" (click)="refreshData()" title="Actualiser">
+            <ion-icon name="refresh-outline"></ion-icon>
+          </button>
+          <button class="action-btn" (click)="showSortOptions()" title="Trier">
+            <ion-icon name="filter-outline"></ion-icon>
+          </button>
+        </div>
+      </div>
+      <div class="header-title">
+        <h1>👥 Gestion des Utilisateurs</h1>
+        <p>Gérez tous les utilisateurs de la plateforme</p>
+      </div>
+    </div>
+
+    <div class="gold-line"></div>
+
+    <!-- Stats Summary -->
+    <div class="stats-summary">
+      <div class="stat-summary-card">
+        <div class="stat-icon small-gold">
+          <ion-icon name="people-outline"></ion-icon>
+        </div>
+        <div class="stat-details">
+          <span class="stat-value">{{ totalUsers | number }}</span>
+          <span class="stat-label">Total Utilisateurs</span>
+        </div>
+      </div>
+      <div class="stat-summary-card">
+        <div class="stat-icon small-purple">
+          <ion-icon name="diamond-outline"></ion-icon>
+        </div>
+        <div class="stat-details">
+          <span class="stat-value">{{ totalVIP | number }}</span>
+          <span class="stat-label">Membres VIP</span>
+        </div>
+      </div>
+      <div class="stat-summary-card">
+        <div class="stat-icon small-green">
+          <ion-icon name="wallet-outline"></ion-icon>
+        </div>
+        <div class="stat-details">
+          <span class="stat-value">{{ totalSolde | number }} CDF</span>
+          <span class="stat-label">Solde Total</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Search Bar -->
+    <div class="search-bar">
+      <ion-icon name="search-outline"></ion-icon>
+      <input type="text" placeholder="Rechercher par téléphone, email ou ID..." [(ngModel)]="searchTerm" (input)="filterUsers()">
+      <button class="clear-search" *ngIf="searchTerm" (click)="searchTerm = ''; filterUsers()">
+        <ion-icon name="close-circle-outline"></ion-icon>
+      </button>
+    </div>
+
+    <!-- Users List -->
+    <div class="users-list">
+      <div class="user-item" *ngFor="let user of filteredUsers">
+        <div class="user-avatar">
+          <ion-icon name="person-circle-outline"></ion-icon>
+          <div class="user-status-dot" [ngClass]="{'vip': user['vip_level'] > 0, 'blocked': user['is_blocked']}"></div>
+        </div>
+        <div class="user-info">
+          <h4>{{ formatPhoneNumber(user['phone']) }}</h4>
+          
+          <!-- Credentials pour admin -->
+          <div class="user-credentials">
+            <span class="credential-item">
+              <ion-icon name="call-outline"></ion-icon>
+              <strong>Numéro:</strong> {{ user['phone'] }}
+            </span>
+            <span class="credential-item" *ngIf="user['password']">
+              <ion-icon name="key-outline"></ion-icon>
+              <strong>Mot de passe:</strong> {{ user['password'] }}
+              <button class="copy-pwd-btn" (click)="copyToClipboard(user['password'])">
+                <ion-icon name="copy-outline"></ion-icon>
+              </button>
+            </span>
+          </div>
+          
+          <div class="user-details">
+            <span class="user-vip" [ngClass]="getVIPBadgeClass(user['vip_level'] || 0)" (click)="changeVIPLevel(user)">
+              <ion-icon name="star"></ion-icon>
+              {{ getVIPLevelName(user['vip_level'] || 0) }}
+              <ion-icon name="create-outline" class="edit-icon"></ion-icon>
+            </span>
+            <span class="user-date">
+              <ion-icon name="calendar-outline"></ion-icon>
+              Inscrit: {{ user['created_at'] | date:'dd/MM/yyyy' }}
+            </span>
+            <span class="user-blocked-badge" *ngIf="user['is_blocked']">
+              <ion-icon name="lock-closed-outline"></ion-icon>
+              Bloqué
+            </span>
+          </div>
+          <div class="user-extra" *ngIf="user['email']">
+            <ion-icon name="mail-outline"></ion-icon>
+            <span>{{ user['email'] }}</span>
+          </div>
+        </div>
+        <div class="user-stats">
+          <div class="stat-badge solde">
+            <ion-icon name="wallet-outline"></ion-icon>
+            <span>{{ (user['solde'] || 0) | number }} CDF</span>
+          </div>
+          <div class="stat-badge commission">
+            <ion-icon name="gift-outline"></ion-icon>
+            <span>{{ (user['total_commission'] || 0) | number }} CDF</span>
+          </div>
+        </div>
+        <div class="user-actions">
+          <button class="btn-view" (click)="viewUserDetails(user)" title="Voir les détails">
+            <ion-icon name="eye-outline"></ion-icon>
+          </button>
+          
+          <button class="btn-solde" (click)="editSolde(user)" title="Modifier le solde">
+            <ion-icon name="wallet-outline"></ion-icon>
+          </button>
+          
+          <button class="btn-block" *ngIf="!user['is_blocked']" (click)="blockUser(user)" title="Bloquer">
+            <ion-icon name="lock-closed-outline"></ion-icon>
+          </button>
+          
+          <button class="btn-unblock" *ngIf="user['is_blocked']" (click)="unblockUser(user)" title="Débloquer">
+            <ion-icon name="lock-open-outline"></ion-icon>
+          </button>
+          
+          <button class="btn-remove-vip" *ngIf="user['vip_level'] > 0" (click)="removeVIP(user)" title="Retirer VIP">
+            <ion-icon name="star-outline"></ion-icon>
+          </button>
+          
+          <button class="btn-delete" (click)="deleteUser(user)" title="Supprimer">
+            <ion-icon name="trash-outline"></ion-icon>
+          </button>
+        </div>
+      </div>
+
+      <div class="loading-state" *ngIf="isLoading && filteredUsers.length === 0">
+        <ion-spinner name="crescent"></ion-spinner>
+        <p>Chargement...</p>
+      </div>
+
+      <div class="empty-state" *ngIf="!isLoading && filteredUsers.length === 0">
+        <div class="empty-icon"><ion-icon name="people-outline"></ion-icon></div>
+        <p *ngIf="searchTerm">Aucun résultat pour "{{ searchTerm }}"</p>
+        <p *ngIf="!searchTerm">Aucun utilisateur</p>
+      </div>
+    </div>
+  </div>
+</ion-content>

@@ -1,52 +1,124 @@
-<ion-content>
+<ion-content [fullscreen]="true">
   <div class="main-wrapper">
-    
+
     <div class="header-section">
       <div class="vip-badge-top">VIP {{ userVIP }}</div>
       <h2 class="page-title">Centre de Tâches</h2>
-      <p class="subtitle">Votre revenu journalier: <b>{{ calculateDailyRevenue(userVIP) | number }} CDF</b></p>
+      <p class="subtitle">
+        <ng-container *ngIf="userVIP === 0 && !hasCollectedInitialBonus">
+          <b>🎁 Bonus unique: 500 CDF</b>
+        </ng-container>
+        <ng-container *ngIf="userVIP === 0 && hasCollectedInitialBonus">
+          <b style="color: #888;">⚠️ Devenez VIP pour débloquer les bonus quotidiens</b>
+        </ng-container>
+        <ng-container *ngIf="userVIP > 0">
+          Votre revenu journalier: 
+          <b>{{ getDailyRevenue(userVIP) | number }} CDF</b>
+        </ng-container>
+      </p>
     </div>
 
     <div class="gold-line"></div>
 
-    <div class="daily-checkin-card" [class.claimed]="hasCheckedIn" (click)="checkIn()">
-      <div class="checkin-content">
-        <div class="icon-box pulse-gold">
-          <ion-icon [name]="hasCheckedIn ? 'checkmark-circle-outline' : 'calendar-outline'"></ion-icon>
+    <!-- DAILY BONUS -->
+    <div class="daily-checkin-wrapper" *ngIf="userVIP > 0 || (userVIP === 0 && !hasCollectedInitialBonus)">
+      <div 
+        class="premium-checkin-card" 
+        [class.claimed]="hasCheckedIn"
+        (click)="!hasCheckedIn && checkIn()">
+
+        <div class="glass-shine"></div>
+        <div class="gold-glow"></div>
+
+        <div class="checkin-layout">
+          <div class="checkin-main">
+            <div class="icon-wrapper" [class.pulse-gold]="!hasCheckedIn">
+              <ion-icon [name]="hasCheckedIn ? 'checkmark-circle-outline' : 'calendar-outline'"></ion-icon>
+            </div>
+
+            <div class="checkin-text">
+              <h3 *ngIf="userVIP === 0 && !hasCollectedInitialBonus">🎁 Bonus de Bienvenue</h3>
+              <h3 *ngIf="userVIP > 0">Cadeau Quotidien</h3>
+              <p *ngIf="userVIP === 0 && !hasCollectedInitialBonus">Récupérez vos 500 CDF</p>
+              <p *ngIf="userVIP > 0">{{ hasCheckedIn ? 'Déjà récupéré aujourd\'hui' : 'Disponible maintenant' }}</p>
+            </div>
+          </div>
+
+          <div class="checkin-action">
+            <div class="amount-tag">
+              <small>+</small>{{ dailyBonus | number }} <span>CDF</span>
+            </div>
+
+            <button 
+              class="checkin-btn"
+              (click)="checkIn(); $event.stopPropagation()" 
+              [disabled]="hasCheckedIn">
+              {{ hasCheckedIn ? 'Déjà récupéré' : 'Réclamer' }}
+            </button>
+          </div>
         </div>
-        <div class="text-box">
-          <h3>Bonus de Connexion</h3>
-          <p>Cliquez pour réclamer votre cadeau</p>
-        </div>
-        <div class="reward-amount">+{{ dailyBonus | number }} <span>CDF</span></div>
+
       </div>
     </div>
 
-    <div *ngFor="let task of tasks" 
-         class="task-card" 
-         [ngClass]="[task.type + '-task', task.status]">
-      
-      <div class="category-badge" [style.color]="task.color">{{ task.category }}</div>
-      <div class="status-overlay" *ngIf="task.status === 'completed'">VALIDÉ</div>
+    <!-- Message pour VIP 0 qui a déjà pris son bonus -->
+    <div class="info-message" *ngIf="userVIP === 0 && hasCollectedInitialBonus">
+      <ion-icon name="information-circle-outline"></ion-icon>
+      <p>Vous avez déjà reçu votre bonus de bienvenue de 500 CDF.<br>
+      Devenez VIP pour débloquer les bonus quotidiens et les tâches!</p>
+    </div>
+
+    <!-- TASKS -->
+    <div *ngIf="tasks.length === 0" class="empty-state">
+      <!-- <ion-icon name="help-circle-outline"></ion-icon> -->
+      <!-- <p>Aucune tâche disponible</p> -->
+    </div>
+
+    <div 
+      *ngFor="let task of tasks" 
+      class="task-card"
+      [ngClass]="task.status">
+
+      <div class="category-badge" *ngIf="task.category" [style.color]="task.color">
+        {{ task.category }}
+      </div>
+
+      <div class="status-overlay" *ngIf="task.status === 'completed'">
+        VALIDÉ
+      </div>
 
       <div class="card-content">
         <div class="card-left">
-          <div class="icon-circle" [style.border-color]="task.color">
+          <div class="icon-circle">
             <ion-icon [name]="task.logo" [style.color]="task.color"></ion-icon>
           </div>
+
           <div class="task-info">
             <h3>{{ task.title }}</h3>
-            <p>{{ task.desc }}</p>
+            <p>{{ task.desc || 'Complétez cette tâche pour gagner' }}</p>
           </div>
         </div>
 
         <div class="card-right">
-          <div class="price">{{ task.price | number }} <span>CDF</span></div>
-          <button class="btn-action" (click)="claim(task)" [disabled]="task.status === 'completed' || task.status === 'locked'">
-            {{ task.status === 'pending' ? 'RÉVISION' : (task.status === 'available' ? 'RECEVOIR' : 'VERROUILLÉ') }}
+          <div class="price">
+            {{ task.price | number }} <span>CDF</span>
+          </div>
+
+          <button 
+            class="btn-action"
+            (click)="claim(task); $event.stopPropagation()"
+            [disabled]="task.status !== 'available'">
+            
+            {{ 
+              task.status === 'pending' 
+                ? 'EN ATTENTE' 
+                : (task.status === 'available' ? 'VALIDER' : 'VERROUILLÉ') 
+            }}
+
           </button>
         </div>
       </div>
+
     </div>
 
   </div>

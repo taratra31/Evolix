@@ -1,0 +1,47 @@
+name: Build Android APK EVOLIX
+on: push
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Install dependencies
+        run: |
+          npm install -g @ionic/cli
+          npm install
+
+      - name: Build Ionic App and Sync Android
+        run: |
+          ionic build --prod
+          npx cap sync android
+
+      - name: Generate Assets (Logo/Icon)
+        # Mamorona ny kisary sy ny splash screen avy amin'ny resources/icon.png
+        run: npx capacitor-assets generate --android
+
+      - name: Build APK
+        run: |
+          cd android
+          chmod +x ./gradlew
+          ./gradlew assembleDebug
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          # Ovay ho EVOLIX ny anaran'ilay rakitra alefa
+          name: EVOLIX
+          path: android/app/build/outputs/apk/debug/app-debug.apk

@@ -3,207 +3,144 @@ ion-content {
     font-family: 'Inter', sans-serif;
 }
 
+.main-wrapper { padding-bottom: 30px; }
+
+/* HEADER & TOP ELEMENTS */
 .header-section {
-    text-align: center;
-    margin-top: 40px;
-    .page-title {
-        color: #f3d078; 
-        font-size: 18px; 
-        text-transform: uppercase; 
-        letter-spacing: 4px;
-        margin-bottom: 5px;
-    }
-    .subtitle {
-        color: #666;
-        font-size: 10px;
-        letter-spacing: 1px;
-        text-transform: uppercase;
-    }
+    text-align: center; margin-top: 40px;
+    .page-title { color: #f3d078; font-size: 18px; text-transform: uppercase; letter-spacing: 4px; margin-bottom: 5px; }
+    .subtitle { color: #888; font-size: 10px; letter-spacing: 1px; text-transform: uppercase; b { color: #f3d078; } }
+}
+
+.vip-badge-top {
+    display: inline-block; background: linear-gradient(135deg, #f3d078, #c19433);
+    color: #1a140e; padding: 4px 15px; border-radius: 20px; font-size: 10px; font-weight: 900;
+    margin-bottom: 10px; box-shadow: 0 4px 10px rgba(243, 208, 112, 0.3);
 }
 
 .gold-line {
-    height: 1px; 
-    background: linear-gradient(90deg, transparent, #f3d078, transparent); 
-    margin: 20px 40px 30px;
-    opacity: 0.4;
+    height: 1px; background: linear-gradient(90deg, transparent, #f3d078, transparent);
+    margin: 20px 40px 30px; opacity: 0.4;
 }
 
+/* DAILY BONUS PREMIUM STYLE */
+.daily-checkin-wrapper { padding: 0 20px; margin-bottom: 35px; }
+
+.premium-checkin-card {
+    position: relative; padding: 20px; border-radius: 24px; overflow: hidden;
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.08) 0%, rgba(243, 208, 120, 0.03) 100%);
+    border: 1px solid rgba(243, 208, 120, 0.2); backdrop-filter: blur(20px);
+    transition: all 0.4s ease;
+    cursor: pointer;
+
+    .glass-shine {
+        position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
+        background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, transparent 70%); pointer-events: none;
+    }
+
+    .checkin-layout { display: flex; justify-content: space-between; align-items: center; position: relative; z-index: 2; flex-wrap: wrap; gap: 15px; }
+
+    .checkin-main {
+        display: flex; align-items: center; gap: 15px;
+        .icon-wrapper {
+            width: 52px; height: 52px; background: rgba(0, 0, 0, 0.3); border-radius: 16px;
+            display: flex; align-items: center; justify-content: center; font-size: 28px; color: #f3d078;
+            border: 1px solid rgba(243, 208, 120, 0.3);
+            &.pulse-gold { animation: premiumPulse 2s infinite; }
+        }
+        .checkin-text {
+            h3 { color: #fff; font-size: 15px; font-weight: 800; margin: 0; }
+            p { color: #888; font-size: 10px; margin: 4px 0 0; }
+        }
+    }
+
+    .checkin-action {
+        text-align: right;
+        .amount-tag { font-size: 18px; font-weight: 900; color: #f3d078; margin-bottom: 8px; span { font-size: 9px; color: #fff; opacity: 0.6; } }
+        .checkin-btn {
+            background: linear-gradient(135deg, #f3d078 0%, #c19433 100%); border: none;
+            padding: 8px 18px; border-radius: 12px; font-size: 10px; font-weight: 900; color: #1a140e;
+            box-shadow: 0 4px 15px rgba(193, 148, 51, 0.3); text-transform: uppercase;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .checkin-btn:active { transform: scale(0.95); }
+        .checkin-btn:disabled { opacity: 0.5; transform: none; cursor: not-allowed; }
+    }
+
+    &.claimed {
+        opacity: 0.7; border-color: rgba(255,255,255,0.1);
+        .icon-wrapper { color: #2ecc71; animation: none; }
+        .checkin-btn { background: rgba(255,255,255,0.1); color: #888; box-shadow: none; }
+        .amount-tag { color: #888; }
+    }
+}
+
+/* TASKS CARDS STYLE */
 .task-card {
-    margin: 0 20px 15px; 
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    border-radius: 20px;
-    padding: 20px;
-    position: relative; 
-    overflow: hidden;
-    backdrop-filter: blur(15px);
-    transition: all 0.3s ease;
+    margin: 0 20px 15px; background: rgba(255, 255, 255, 0.03); border-radius: 20px;
+    padding: 20px; position: relative; overflow: hidden; backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.05); transition: 0.3s;
 
-    &.available { animation: pulse 3s infinite; }
+    &.available { border-color: rgba(243, 208, 120, 0.2); }
+    &.pending { border-color: #f3d078; background: rgba(243, 208, 120, 0.05); .btn-action { background: #333; color: #f3d078; cursor: not-allowed; } }
+    &.locked { opacity: 0.5; filter: grayscale(1); .btn-action { background: #444; cursor: not-allowed; } }
 
-    &.pending {
-        border-color: #f3d078;
-        background: rgba(243, 208, 120, 0.05);
-        .btn-action { background: #333; color: #f3d078; }
-    }
+    .category-badge { font-size: 8px; font-weight: 900; letter-spacing: 1px; margin-bottom: 12px; text-transform: uppercase; display: inline-block; }
 
-    &.completed {
-        opacity: 0.6;
-        filter: grayscale(0.8);
-        .btn-action { background: #2ecc71 !important; color: #fff; }
-    }
-
-    .category-badge {
-        font-size: 8px;
-        font-weight: 900;
-        letter-spacing: 1px;
-        margin-bottom: 12px;
-    }
-
-    .card-content {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
+    .card-content { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; }
 
     .card-left {
-        display: flex; 
-        align-items: center; 
-        gap: 15px;
-
-        .icon-circle {
-            width: 48px; 
-            height: 48px; 
-            background: rgba(0, 0, 0, 0.4);
-            border-radius: 12px;
-            display: flex;
-            align-items: center; 
-            justify-content: center;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            ion-icon { font-size: 24px; }
-        }
-
-        .task-info {
-            h3 { color: #fff; font-size: 14px; margin: 0; font-weight: 700; }
-            p { color: #888; font-size: 11px; margin: 4px 0 0; }
-        }
+        display: flex; align-items: center; gap: 15px; flex: 1;
+        .icon-circle { width: 48px; height: 48px; background: rgba(0, 0, 0, 0.4); border-radius: 12px; display: flex; align-items: center; justify-content: center; border: 1px solid rgba(255, 255, 255, 0.1); ion-icon { font-size: 24px; } }
+        .task-info { h3 { color: #fff; font-size: 14px; margin: 0; font-weight: 700; } p { color: #888; font-size: 11px; margin: 4px 0 0; } }
     }
 
     .card-right {
         text-align: right;
-        .price {
-            color: #f3d078; 
-            font-weight: 800; 
-            font-size: 17px; 
-            margin-bottom: 8px;
-            span { font-size: 9px; color: #fff; margin-left: 2px; }
-        }
-        .btn-action {
-            background: linear-gradient(180deg, #f3d078, #c19433);
-            border: none; 
-            padding: 8px 14px; 
-            border-radius: 8px; 
-            font-size: 10px; 
-            font-weight: 800; 
-            color: #1a140e;
-            &:active { transform: scale(0.92); }
-        }
+        .price { color: #f3d078; font-weight: 800; font-size: 17px; margin-bottom: 8px; span { font-size: 9px; color: #aaa; } }
+        .btn-action { background: linear-gradient(180deg, #f3d078, #c19433); border: none; padding: 8px 14px; border-radius: 8px; font-size: 10px; font-weight: 800; color: #1a140e; cursor: pointer; transition: transform 0.2s; }
+        .btn-action:active { transform: scale(0.95); }
+        .btn-action:disabled { opacity: 0.5; transform: none; cursor: not-allowed; }
     }
 
     .status-overlay {
-        position: absolute;
-        top: 10px;
-        right: -25px;
-        background: #2ecc71;
-        color: #fff;
-        font-size: 8px;
-        padding: 4px 30px;
-        transform: rotate(45deg);
-        font-weight: 900;
+        position: absolute; top: 10px; right: -25px; background: #2ecc71; color: #fff;
+        font-size: 8px; padding: 4px 30px; transform: rotate(45deg); font-weight: 900; display: none;
     }
 }
 
-@keyframes pulse {
-    0% { border-color: rgba(243, 208, 120, 0.1); }
-    50% { border-color: rgba(243, 208, 120, 0.4); }
-    100% { border-color: rgba(243, 208, 120, 0.1); }
-}
-// ... Tehirizo ny teo aloha fa ampiana ireto ho an'ny Check-in:
-
-.daily-checkin-card {
-    margin: 0 20px 30px;
-    background: linear-gradient(135deg, rgba(243, 208, 120, 0.2) 0%, rgba(0, 0, 0, 0.4) 100%);
-    border: 1px solid rgba(243, 208, 120, 0.3);
-    border-radius: 20px;
-    padding: 15px 20px;
-    cursor: pointer;
-    transition: 0.3s;
-
-    &:active { transform: scale(0.97); }
-
-    &.claimed {
-        background: rgba(255, 255, 255, 0.05);
-        border-color: rgba(255, 255, 255, 0.1);
-        opacity: 0.8;
-        .icon-box { color: #2ecc71; }
-        .reward-amount { color: #888; }
-    }
-
-    .checkin-content {
-        display: flex;
-        align-items: center;
-        gap: 15px;
-
-        .icon-box {
-            font-size: 30px;
-            color: #f3d078;
-        }
-
-        .text-box {
-            flex: 1;
-            h3 { color: #fff; font-size: 14px; margin: 0; font-weight: 700; }
-            p { color: #ccc; font-size: 10px; margin: 2px 0 0; }
-        }
-
-        .reward-amount {
-            font-weight: 900;
-            color: #f3d078;
-            font-size: 16px;
-            span { font-size: 9px; margin-left: 2px; }
-        }
-    }
+.empty-state {
+    text-align: center; padding: 50px 20px;
+    ion-icon { font-size: 64px; color: #888; margin-bottom: 15px; }
+    p { color: #888; font-size: 14px; }
 }
 
-// Amboary eto ny vola ho CDF fa tsy FC intsony
-.price {
-    span { color: #fff !important; opacity: 0.7; }
+/* ANIMATIONS */
+@keyframes premiumPulse {
+    0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(243, 208, 120, 0.4); }
+    70% { transform: scale(1.05); box-shadow: 0 0 0 10px rgba(243, 208, 120, 0); }
+    100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(243, 208, 120, 0); }
 }
-// ... Tehirizo ny teo aloha fa ampiana ity:
-
-.vip-badge-top {
-    display: inline-block;
-    background: linear-gradient(135deg, #f3d078, #c19433);
-    color: #1a140e;
-    padding: 4px 15px;
-    border-radius: 20px;
-    font-size: 10px;
-    font-weight: 900;
-    margin-bottom: 10px;
-    box-shadow: 0 4px 10px rgba(243, 208, 112, 0.3);
-}
-
-.pulse-gold {
-    animation: iconPulse 2s infinite;
-}
-
-@keyframes iconPulse {
-    0% { transform: scale(1); filter: drop-shadow(0 0 0px #f3d078); }
-    50% { transform: scale(1.1); filter: drop-shadow(0 0 8px #f3d078); }
-    100% { transform: scale(1); filter: drop-shadow(0 0 0px #f3d078); }
-}
-
-.task-card.locked {
-    filter: grayscale(1);
-    opacity: 0.5;
-    .btn-action { background: #555; }
+.info-message {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(243, 208, 120, 0.1);
+  border: 1px solid rgba(243, 208, 120, 0.2);
+  border-radius: 16px;
+  padding: 15px;
+  margin-bottom: 20px;
+  
+  ion-icon {
+    font-size: 28px;
+    color: #f3d078;
+  }
+  
+  p {
+    margin: 0;
+    font-size: 13px;
+    color: #aaa;
+    line-height: 1.4;
+  }
 }

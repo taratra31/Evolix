@@ -1,0 +1,111 @@
+<ion-content [fullscreen]="true" class="transactions-content">
+  
+  <div class="transactions-spotlight"></div>
+
+  <div class="main-wrapper">
+    <!-- Header -->
+    <div class="page-header">
+      <div class="back-navigation">
+        <div class="back-btn" (click)="goBack()">
+          <ion-icon name="arrow-back-outline"></ion-icon>
+          <span>Retour</span>
+        </div>
+      </div>
+      <div class="header-title">
+        <h1>📊 Transactions</h1>
+        <p>Gérez toutes les transactions</p>
+      </div>
+    </div>
+
+    <div class="gold-line"></div>
+
+    <!-- Stats Summary -->
+    <div class="stats-summary">
+      <div class="stat-summary-card">
+        <div class="stat-icon small-gold">
+          <ion-icon name="trending-up-outline"></ion-icon>
+        </div>
+        <div class="stat-details">
+          <span class="stat-value">{{ totalDepots | number }} CDF</span>
+          <span class="stat-label">Total Dépôts</span>
+        </div>
+      </div>
+      <div class="stat-summary-card">
+        <div class="stat-icon small-red">
+          <ion-icon name="trending-down-outline"></ion-icon>
+        </div>
+        <div class="stat-details">
+          <span class="stat-value">{{ totalRetraits | number }} CDF</span>
+          <span class="stat-label">Total Retraits</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Filter Tabs -->
+    <div class="filter-tabs">
+      <div class="filter-tab" [class.active]="selectedFilter === 'all'" (click)="filterTransactions('all')">
+        <span>Toutes</span>
+      </div>
+      <div class="filter-tab" [class.active]="selectedFilter === 'depot'" (click)="filterTransactions('depot')">
+        <span>Dépôts</span>
+      </div>
+      <div class="filter-tab" [class.active]="selectedFilter === 'retrait'" (click)="filterTransactions('retrait')">
+        <span>Retraits</span>
+      </div>
+      <div class="filter-tab" [class.active]="selectedFilter === 'pending'" (click)="filterTransactions('pending')">
+        <span>En attente</span>
+      </div>
+    </div>
+
+    <!-- Transactions List -->
+    <div class="transactions-list">
+      <div class="transaction-item" *ngFor="let trans of filteredTransactions">
+        <div class="transaction-left">
+          <div class="trans-icon" [ngClass]="trans.type">
+            <ion-icon [name]="trans.type === 'depot' ? 'arrow-down-outline' : 'arrow-up-outline'"></ion-icon>
+          </div>
+          <div class="trans-info">
+            <h4>{{ trans.type === 'depot' ? 'Dépôt' : 'Retrait' }}</h4>
+            <p class="trans-user">{{ trans.user_phone || trans.users?.phone || 'Utilisateur' }}</p>
+            <p class="trans-date">{{ trans.created_at | date:'dd/MM/yyyy à HH:mm' }}</p>
+          </div>
+        </div>
+        <div class="transaction-right">
+          <div class="trans-amount" [ngClass]="trans.type">
+            <span>{{ trans.type === 'depot' ? '+' : '-' }}{{ trans.montant | number }} CDF</span>
+          </div>
+          <div class="status-badge" [ngClass]="trans.status">
+            <ion-icon [name]="getStatusIcon(trans.status)"></ion-icon>
+            <span>{{ getStatusText(trans.status) }}</span>
+          </div>
+          <!-- Boutons pour admin uniquement -->
+          <div class="action-buttons" *ngIf="trans.status === 'pending' && isAdmin">
+            <button class="btn-accept" (click)="updateStatus(trans, 'accepted')">
+              <ion-icon name="checkmark-outline"></ion-icon>
+            </button>
+            <button class="btn-reject" (click)="updateStatus(trans, 'refused')">
+              <ion-icon name="close-outline"></ion-icon>
+            </button>
+          </div>
+          <!-- Message si transaction déjà traitée -->
+          <div class="processed-badge" *ngIf="trans.status !== 'pending'">
+            <span>✓ Traité par admin</span>
+          </div>
+          <!-- Message si user non admin -->
+          <div class="admin-only-message" *ngIf="trans.status === 'pending' && !isAdmin">
+            <span>🔒 Seul l'administrateur peut traiter</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Empty State -->
+      <div class="empty-state" *ngIf="filteredTransactions.length === 0">
+        <div class="empty-icon">
+          <ion-icon name="receipt-outline"></ion-icon>
+        </div>
+        <p>Aucune transaction trouvée</p>
+      </div>
+    </div>
+
+  </div>
+</ion-content>

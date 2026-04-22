@@ -2,15 +2,20 @@
   <div class="main-container">
     
     <div class="header-section">
-      <ion-button fill="clear">
-        <!-- <ion-icon slot="icon-only" name="arrow-back-outline"></ion-icon> -->
-      </ion-button>
+      <div class="header-left">
+        <!-- Espace vide pour l'alignement -->
+      </div>
+      
       <div class="header-logo">
         <img src="assets/logo.png" alt="Logo">
       </div>
-      <button fill="clear">
-        <!-- <ion-icon name="settings-outline"></ion-icon> -->
-      </button>
+      
+      <!-- 🔥 BOUTON ADMIN - Miseho raha admin ihany -->
+      <div class="header-right">
+        <div class="admin-btn" (click)="goToAdmin()" *ngIf="isAdmin">
+          <ion-icon name="shield-outline"></ion-icon>
+        </div>
+      </div>
     </div>
 
     <div class="title-wrapper">
@@ -61,15 +66,59 @@
       </button>
     </div>
 
-    <div class="wa-container">
-      <a href="https://chat.whatsapp.com/HBoCNMxdpqS2vUey4a9roi" target="_blank" class="wa-card">
-        <div class="wa-left">
-          <div class="wa-icon-box">
+    <!-- 🔥 SOCIAL LINKS: WhatsApp + Telegram + YouTube + Facebook -->
+    <div class="social-links">
+      <!-- WhatsApp Group -->
+      <a href="https://whatsapp.com/channel/0029VbCTf1U17En4Vy3osg1k" target="_blank" class="social-card whatsapp">
+        <div class="social-left">
+          <div class="social-icon-box">
             <ion-icon name="logo-whatsapp"></ion-icon>
           </div>
-          <div class="wa-text">
-            <span class="wa-title">Groupe Officiel</span>
-            <span class="wa-subtitle">Assistance 24h/7j</span>
+          <div class="social-text">
+            <span class="social-title">Groupe WhatsApp</span>
+            <span class="social-subtitle">Assistance 24h/7j</span>
+          </div>
+        </div>
+        <ion-icon name="chevron-forward-outline" class="arrow-fade"></ion-icon>
+      </a>
+
+      <!-- Telegram Group -->
+      <a href="https://t.me/evolixy" target="_blank" class="social-card telegram">
+        <div class="social-left">
+          <div class="social-icon-box">
+            <ion-icon name="paper-plane-outline"></ion-icon>
+          </div>
+          <div class="social-text">
+            <span class="social-title">Groupe Telegram</span>
+            <span class="social-subtitle">Actualités & Annonces</span>
+          </div>
+        </div>
+        <ion-icon name="chevron-forward-outline" class="arrow-fade"></ion-icon>
+      </a>
+
+      <!-- YouTube Channel -->
+      <a href="https://youtube.com/@evolix-u6y?si=KLlyCRzQOwYr6v8-" target="_blank" class="social-card youtube">
+        <div class="social-left">
+          <div class="social-icon-box">
+            <ion-icon name="logo-youtube"></ion-icon>
+          </div>
+          <div class="social-text">
+            <span class="social-title">Chaîne YouTube</span>
+            <span class="social-subtitle">Tutoriels & Replays</span>
+          </div>
+        </div>
+        <ion-icon name="chevron-forward-outline" class="arrow-fade"></ion-icon>
+      </a>
+
+      <!-- Facebook Profile -->
+      <a href="https://www.facebook.com/profile.php?id=61575443071471" target="_blank" class="social-card facebook">
+        <div class="social-left">
+          <div class="social-icon-box">
+            <ion-icon name="logo-facebook"></ion-icon>
+          </div>
+          <div class="social-text">
+            <span class="social-title">Page Facebook</span>
+            <span class="social-subtitle">Suivez nos actualités</span>
           </div>
         </div>
         <ion-icon name="chevron-forward-outline" class="arrow-fade"></ion-icon>
@@ -151,6 +200,11 @@
         <ion-icon name="log-out-outline"></ion-icon>
         SE DÉCONNECTER
       </button>
+    </div>
+
+    <!-- 🔥 DEBUG: Aseho raha admin (tsy hita raha tsy admin) -->
+    <div class="debug-info" *ngIf="isAdmin" style="text-align: center; margin-top: 10px; font-size: 10px; color: #f3d078;">
+      Mode Admin activé
     </div>
 
   </div>

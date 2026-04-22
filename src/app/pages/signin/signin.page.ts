@@ -1,12 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonContent, IonButton, IonIcon } from '@ionic/angular/standalone';
+import { IonContent, IonButton, IonIcon, ToastController } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { chevronDownOutline } from 'ionicons/icons';
 import { SigninService } from '../../services/register/signin/signin.service';
-import { RouterLink, ActivatedRoute } from '@angular/router';
-
+import { RouterLink, ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-signin',
@@ -29,9 +28,7 @@ export class SigninPage implements OnInit {
   isLoading = false;
 
   selectedCountry = {
-    name: 'Madagascar',
-    dialCode: '+261',
-    flag: 'https://flagcdn.com/w40/mg.png'
+     name: 'DRC', dialCode: '+243', flag: 'https://flagcdn.com/w40/cd.png' 
   };
 
   countries = [
@@ -43,25 +40,31 @@ export class SigninPage implements OnInit {
 
   constructor(
     private signinService: SigninService,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private router: Router,
+    private toastCtrl: ToastController
   ) {
     addIcons({ chevronDownOutline });
   }
 
   ngOnInit() {
-    console.log('🔗 SigninPage ngOnInit');
-    
-    // Capturer le paramètre ref depuis l'URL
     this.activatedRoute.queryParams.subscribe(params => {
       const ref = params['ref'];
-      console.log('📋 Query params:', params);
-      console.log('🎯 Referral code from URL:', ref);
-      
-      if (ref) {
+      if (ref && ref !== 'null' && ref !== 'undefined') {
         this.referral = ref;
-        console.log('✅ Referral auto-filled:', this.referral);
+        this.presentToast(`Code parrain: ${ref}`, 'success');
       }
     });
+  }
+
+  async presentToast(message: string, color: string) {
+    const toast = await this.toastCtrl.create({
+      message,
+      duration: 2000,
+      color,
+      position: 'bottom'
+    });
+    await toast.present();
   }
 
   toggleCountryList() {
@@ -73,47 +76,40 @@ export class SigninPage implements OnInit {
     this.showCountries = false;
   }
 
-  // ✅ Validation numéro logique
   validatePhone(): string | null {
     const phone = this.phone.replace(/\s+/g, '');
 
     switch (this.selectedCountry.dialCode) {
-
       case '+261': // Madagascar
-        if (!/^3[2-8]\d{7}$/.test(phone)) {
-          return 'Numéro Madagascar invalide (ex: 0381234567)';
+        let cleanPhoneMG = phone.replace(/^0+/, '');
+        if (!/^3[2-8]\d{7}$/.test(cleanPhoneMG)) {
+          return 'Numéro Madagascar invalide (ex: 381234567)';
         }
         break;
-
+      case '+243': // RDC
+        if (!/^[8-9]\d{8}$/.test(phone)) {
+          return 'Numéro RDC invalide (9 chiffres, commence par 8 ou 9)';
+        }
+        break;
       case '+33': // France
         if (!/^[67]\d{8}$/.test(phone)) {
-          return 'Numéro France invalide';
+          return 'Numéro France invalide (9 chiffres, commence par 6 ou 7)';
         }
         break;
-
-      case '+243': // RDC
-        if (!/^9\d{8}$/.test(phone)) {
-          return 'Numéro RDC invalide';
-        }
-        break;
-
       case '+1': // USA
         if (!/^\d{10}$/.test(phone)) {
-          return 'Numéro USA invalide';
+          return 'Numéro USA invalide (10 chiffres)';
         }
         break;
-
       default:
-        if (phone.length < 6) {
+        if (phone.length < 6 || phone.length > 15) {
           return 'Numéro invalide';
         }
     }
-
     return null;
   }
 
   async register() {
-
     this.errorMessage = '';
     this.successMessage = '';
 
@@ -151,7 +147,7 @@ export class SigninPage implements OnInit {
       this.successMessage = 'Inscription réussie 🎉';
 
       setTimeout(() => {
-        window.location.href = '/login';
+        this.router.navigate(['/tabs/acceuil']);
       }, 1500);
 
     } catch (err: any) {
@@ -160,13 +156,13 @@ export class SigninPage implements OnInit {
 
     this.isLoading = false;
   }
-    scrollToInput() {
-  setTimeout(() => {
-    document.activeElement?.scrollIntoView({ 
-      behavior: 'smooth', 
-      block: 'center' 
-    });
-  }, 300);
 
-    }
+  scrollToInput() {
+    setTimeout(() => {
+      document.activeElement?.scrollIntoView({ 
+        behavior: 'smooth', 
+        block: 'center' 
+      });
+    }, 300);
   }
+}

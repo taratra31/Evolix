@@ -1,0 +1,145 @@
+<!-- src/app/admin/number/number.page.html -->
+<ion-content class="admin-content">
+  
+  <div class="admin-spotlight"></div>
+
+  <div class="main-wrapper">
+    
+    <!-- Header Premium -->
+    <div class="admin-header">
+      <div class="logo-section">
+        <img src="assets/logo.png" alt="Logo" class="logo">
+        <h1>NUMÉROS <span>DE COLLECTE</span></h1>
+      </div>
+      <div class="header-actions">
+        <div class="admin-badge">
+          <ion-icon name="shield-checkmark-outline"></ion-icon>
+          <span>Admin</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Back Navigation Premium -->
+    <div class="back-navigation">
+      <div class="back-btn" (click)="goBack()">
+        <ion-icon name="arrow-back-outline"></ion-icon>
+        <span>Retour au tableau de bord</span>
+      </div>
+    </div>
+
+    <div class="gold-line"></div>
+
+    <!-- Info Card -->
+    <div class="info-card">
+      <div class="info-icon">
+        <ion-icon name="information-circle"></ion-icon>
+      </div>
+      <div class="info-text">
+        <h4>Gestion des numéros de collecte</h4>
+        <p>Les utilisateurs verront ces numéros lors des dépôts. Modifiez-les en temps réel.</p>
+      </div>
+    </div>
+
+    <!-- Stats Mini -->
+    <div class="stats-mini">
+      <div class="stat-mini-item">
+        <div class="stat-mini-value">{{ numbers.length }}</div>
+        <div class="stat-mini-label">Opérateurs</div>
+      </div>
+      <div class="stat-mini-item">
+        <div class="stat-mini-value">{{ activeCount }}</div>
+        <div class="stat-mini-label">Actifs</div>
+      </div>
+      <div class="stat-mini-item">
+        <div class="stat-mini-value">{{ inactiveCount }}</div>
+        <div class="stat-mini-label">Inactifs</div>
+      </div>
+    </div>
+
+    <!-- Loader -->
+    <div *ngIf="isLoading" class="loader-container">
+      <div class="custom-loader"></div>
+      <p>Chargement des numéros...</p>
+    </div>
+
+    <!-- Liste des numéros -->
+    <div *ngIf="!isLoading" class="numbers-list">
+      <div class="number-card" *ngFor="let num of numbers">
+        
+        <!-- Opérateur Logo & Nom -->
+        <div class="card-header">
+          <div class="operator-info">
+            <div class="operator-logo" [class]="num.operator">
+              <ion-icon [name]="getOperatorIcon(num.operator)"></ion-icon>
+            </div>
+            <h3>{{ num.operator | titlecase }}</h3>
+          </div>
+          <div class="status-toggle">
+            <ion-toggle 
+              [(ngModel)]="num.is_active" 
+              (ionChange)="toggleStatus(num)"
+              color="warning">
+            </ion-toggle>
+            <span class="status-label" [class.active]="num.is_active">
+              {{ num.is_active ? 'Actif' : 'Inactif' }}
+            </span>
+          </div>
+        </div>
+
+        <!-- Numéro de téléphone -->
+        <div class="card-body">
+          <div class="phone-section">
+            <ion-icon name="call-outline"></ion-icon>
+            
+            <!-- Mode édition -->
+            <div *ngIf="editingId === num.id" class="edit-mode">
+              <input 
+                type="tel" 
+                [(ngModel)]="editValue" 
+                placeholder="Numéro de téléphone"
+                class="phone-input"
+                autofocus>
+              <div class="edit-actions">
+                <button class="save-btn" (click)="saveNumber(num)">
+                  <ion-icon name="checkmark-outline"></ion-icon>
+                </button>
+                <button class="cancel-btn" (click)="cancelEdit()">
+                  <ion-icon name="close-outline"></ion-icon>
+                </button>
+              </div>
+            </div>
+
+            <!-- Mode affichage -->
+            <div *ngIf="editingId !== num.id" class="display-mode">
+              <span class="phone-number">{{ num.phone_number }}</span>
+              <button class="edit-btn" (click)="startEdit(num)">
+                <ion-icon name="create-outline"></ion-icon>
+                Modifier
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Footer Card -->
+        <div class="card-footer">
+          <div class="last-updated">
+            <ion-icon name="time-outline"></ion-icon>
+            <span>Mis à jour: {{ num.updated_at | date:'dd/MM/yyyy HH:mm' }}</span>
+          </div>
+          <div class="copy-btn" (click)="copyNumber(num.phone_number)">
+            <ion-icon name="copy-outline"></ion-icon>
+            Copier
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Empty State -->
+    <div *ngIf="!isLoading && numbers.length === 0" class="empty-state">
+      <ion-icon name="call-outline"></ion-icon>
+      <h4>Aucun numéro configuré</h4>
+      <p>Veuillez ajouter des numéros dans la base de données.</p>
+    </div>
+
+  </div>
+</ion-content>

@@ -11,14 +11,9 @@ export class LoginService {
   async login(data: any) {
     const { phone, country_code, password } = data;
 
-    // 🔥 clean phone
     let cleanPhone = phone.replace(/\s+/g, '');
     cleanPhone = cleanPhone.replace(/^0+/, '');
-
     const fullPhone = `${country_code}${cleanPhone}`;
-
-    console.log('👉 PHONE SENT:', fullPhone);
-    console.log('👉 PASSWORD:', password);
 
     const { data: user, error } = await this.supabaseService.supabase
       .from('users')
@@ -27,19 +22,19 @@ export class LoginService {
       .eq('password', password)
       .maybeSingle();
 
-    console.log('👉 USER FROM SUPABASE:', user);
-    console.log('👉 ERROR:', error);
-
     if (error) throw error;
 
     if (!user) {
       throw 'Numéro ou mot de passe incorrect';
     }
 
-    // 🔥 SAVE USER ID
     localStorage.setItem('userId', user.id);
-
-    console.log('👉 USER ID SAVED:', localStorage.getItem('userId'));
+    localStorage.setItem('userPhone', user.phone);
+    localStorage.setItem('userVIP', String(user.vip_level ?? 0));
+    localStorage.setItem('userSolde', String(user.solde ?? 0));
+    localStorage.setItem('userIsAdmin', String(user.is_admin ?? false));
+    localStorage.setItem('userReferralCode', user.referral_code || '');
+    localStorage.setItem('rememberMe', 'true');
 
     return user;
   }

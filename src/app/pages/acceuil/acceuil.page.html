@@ -1,119 +1,416 @@
 <ion-content [fullscreen]="true" class="home-content">
   
-  <div class="spotlight"></div>
+  <div class="animated-bg">
+    <div class="gradient-orb orb-1"></div>
+    <div class="gradient-orb orb-2"></div>
+    <div class="gradient-orb orb-3"></div>
+  </div>
 
   <div class="main-wrapper">
+    <!-- HEADER PREMIUM -->
     <div class="dashboard-header">
       <div class="user-info">
-        <div class="avatar-box">
+        <div class="avatar-box" [class.vip]="userVip > 0">
           <img src="assets/logo.png" alt="Logo">
+          <div class="vip-badge" *ngIf="userVip > 0">
+            <ion-icon name="diamond"></ion-icon>
+            VIP {{ userVip }}
+          </div>
         </div>
         <div class="text-info">
-          <p class="greeting">Bonjour 👋</p>
-          <h2 class="user-name">Membre Evolix</h2>
+          <p class="greeting">Bienvenue 👋</p>
+          <h2 class="user-name">{{ userPhone || 'Membre Evolix' }}</h2>
         </div>
       </div>
-      <div class="notif-badge" (click)="goToNotif()">
-        <ion-icon name="notifications-outline"></ion-icon>
-        <span class="dot"></span>
+      <div class="header-actions">
+        <div class="action-btn notif-btn" (click)="goToNotif()">
+          <ion-icon name="notifications-outline"></ion-icon>
+          <span class="notification-dot" *ngIf="hasUnreadNotifications">
+            <span class="pulse-ring"></span>
+          </span>
+        </div>
+        <div class="action-btn refresh-btn" (click)="doRefresh()">
+          <ion-icon name="refresh-outline"></ion-icon>
+        </div>
       </div>
     </div>
 
-    <div class="premium-card">
-      <div class="card-bg"></div>
+    <!-- CARD PRINCIPALE - FONDS TOTAL ÉVOLIX -->
+    <div class="premium-card" [class.vip-card]="userVip > 0">
+      <div class="card-glow"></div>
       <div class="card-content">
         <div class="top-row">
-          <span class="card-label">SOLDE TOTAL DISPONIBLE</span>
-          <img src="assets/logo.png" class="chip">
-        </div>
-        <h1 class="main-amount">125.000,00 <span>CDF</span></h1>
-        <div class="bottom-row">
-          <div class="stat">
-            <ion-icon name="trending-up-outline"></ion-icon>
-            <span>+2.4% (Aujourd'hui)</span>
+          <span class="card-label">
+            <ion-icon name="trending-up"></ion-icon>
+            FONDS TOTAL ÉVOLIX
+          </span>
+          <div class="card-icons">
+            <img src="assets/logo.png" class="chip">
+            <ion-icon name="shield-checkmark" class="shield-icon"></ion-icon>
           </div>
-          <div class="wallet-type">Compte Standard</div>
         </div>
-      </div>
-    </div>
+        
+        <div class="amount-wrapper">
+          <h1 class="main-amount">
+            {{ totalEvolixSolde | number:'1.0-0' }}
+            <span class="currency">CDF</span>
+          </h1>
+          <div class="amount-trend" *ngIf="weeklyGrowth !== undefined">
+            <ion-icon name="trending-up"></ion-icon>
+            <span>+{{ weeklyGrowth | number:'1.1-1' }}% cette semaine</span>
+          </div>
+        </div>
 
-    <div class="quick-actions">
-      <div class="action-item" (click)="goTo('depot')">
-        <div class="icon-circle gold">
-          <ion-icon name="add-outline"></ion-icon>
+        <div class="stats-row">
+          <div class="stat-item">
+            <ion-icon name="pie-chart"></ion-icon>
+            <div class="stat-info">
+              <span class="stat-label">Votre part</span>
+              <strong class="stat-value">{{ userPercentage | number:'1.2-2' }}%</strong>
+            </div>
+          </div>
+          <div class="stat-item">
+            <ion-icon name="people"></ion-icon>
+            <div class="stat-info">
+              <span class="stat-label">Membres actifs</span>
+              <strong class="stat-value">{{ totalUsers || 0 }}</strong>
+            </div>
+          </div>
         </div>
-        <span>Dépôt</span>
-      </div>
-      <div class="action-item" (click)="goTo('retrait')">
-        <div class="icon-circle blue">
-          <ion-icon name="arrow-down-outline"></ion-icon>
-        </div>
-        <span>Retrait</span>
-      </div>
-      <div class="action-item" (click)="goTo('equipe')">
-        <div class="icon-circle glass">
-          <ion-icon name="people-outline"></ion-icon>
-        </div>
-        <span>Équipe</span>
-      </div>
-      <div class="action-item" (click)="goTo('tache')">
-        <div class="icon-circle glass">
-          <ion-icon name="flash-outline"></ion-icon>
-        </div>
-        <span>Tâches</span>
-      </div>
-    </div>
 
-    <div class="pro-section">
-      <div class="section-header">
-        <h3>Performance Hebdomadaire</h3>
-        <ion-icon name="ellipsis-horizontal"></ion-icon>
-      </div>
-      <div class="glass-card chart-container">
-        <div class="chart-mock">
-          <div class="bar" style="height: 40%"></div>
-          <div class="bar" style="height: 60%"></div>
-          <div class="bar highlight" style="height: 80%"></div>
-          <div class="bar" style="height: 50%"></div>
-          <div class="bar" style="height: 70%"></div>
-          <div class="bar" style="height: 90%"></div>
+        <div class="progress-section">
+          <div class="progress-bar-container">
+            <div class="progress-bar-fill" [style.width.%]="userPercentage"></div>
+          </div>
+          <div class="progress-labels">
+            <span>0%</span>
+            <span>50%</span>
+            <span>100%</span>
+          </div>
         </div>
-      </div>
-    </div>
-
-    <div class="pro-section">
-      <div class="section-header">
-        <h3>Tendances du Marché</h3>
-        <span class="view-all">Tout voir</span>
       </div>
       
-      <div class="market-list">
-        <div class="market-item">
-          <div class="coin-info">
-            <div class="coin-icon btc">₿</div>
-            <div>
-              <h4>Bitcoin</h4>
-              <p>BTC / CDF</p>
+      <div class="circular-decoration">
+        <svg viewBox="0 0 100 100">
+          <circle cx="50" cy="50" r="45" fill="none" stroke="rgba(243, 208, 120, 0.1)" stroke-width="2"/>
+          <circle cx="50" cy="50" r="45" fill="none" stroke="#f3d078" stroke-width="2" 
+                  [attr.stroke-dasharray]="283" 
+                  [attr.stroke-dashoffset]="283 - (283 * userPercentage / 100)"
+                  stroke-linecap="round" transform="rotate(-90 50 50)"/>
+        </svg>
+        <div class="ring-content">
+          <span class="ring-percentage">{{ userPercentage | number:'1.0-0' }}%</span>
+          <span class="ring-label">part</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- CARD SOLDE UTILISATEUR -->
+    <div class="user-solde-card" (click)="goTo('portefeuille')">
+      <div class="card-icon">
+        <ion-icon name="wallet"></ion-icon>
+      </div>
+      <div class="card-details">
+        <span class="card-label">Votre solde disponible</span>
+        <div class="amount-group">
+          <h3 class="solde-amount">{{ userSolde | number:'1.0-0' }}</h3>
+          <span class="currency-badge">CDF</span>
+        </div>
+      </div>
+      <div class="card-action" *ngIf="userVip > 0">
+        <div class="vip-indicator">
+          <ion-icon name="diamond"></ion-icon>
+          <span>VIP {{ userVip }}</span>
+        </div>
+      </div>
+      <div class="ripple-effect"></div>
+    </div>
+
+    <!-- ACTIONS RAPIDES -->
+    <div class="quick-actions-grid">
+      <div class="action-card" (click)="goTo('depot')">
+        <div class="action-icon deposit">
+          <ion-icon name="add-circle"></ion-icon>
+        </div>
+        <span class="action-label">Dépôt</span>
+        <span class="action-desc">Ajouter des fonds</span>
+      </div>
+      <div class="action-card" (click)="goTo('retrait')">
+        <div class="action-icon withdraw">
+          <ion-icon name="arrow-down-circle"></ion-icon>
+        </div>
+        <span class="action-label">Retrait</span>
+        <span class="action-desc">Retirer vos gains</span>
+      </div>
+      <div class="action-card" (click)="goTo('equipe')">
+        <div class="action-icon team">
+          <ion-icon name="people-circle"></ion-icon>
+        </div>
+        <span class="action-label">Équipe</span>
+        <span class="action-desc">{{ parrainageCount || 0 }} membres</span>
+      </div>
+      <div class="action-card" (click)="goTo('tache')">
+        <div class="action-icon tasks">
+          <ion-icon name="flash"></ion-icon>
+        </div>
+        <span class="action-label">Tâches</span>
+        <span class="action-desc">Gagner +</span>
+      </div>
+    </div>
+
+    <!-- STATS MINI CARD -->
+    <div class="mini-stats">
+      <div class="mini-stat">
+        <div class="stat-icon">
+          <ion-icon name="bar-chart"></ion-icon>
+        </div>
+        <div class="stat-data">
+          <span class="stat-value">{{ (totalEvolixSolde / 1000000) | number:'1.1-1' }}M</span>
+          <span class="stat-label">Volume total</span>
+        </div>
+      </div>
+      <div class="mini-stat" (click)="goTo('equipe')">
+        <div class="stat-icon">
+          <ion-icon name="gift"></ion-icon>
+        </div>
+        <div class="stat-data">
+          <span class="stat-value">{{ parrainageCount || 0 }}</span>
+          <span class="stat-label">Parrainages</span>
+        </div>
+      </div>
+      <div class="mini-stat">
+        <div class="stat-icon">
+          <ion-icon name="calendar"></ion-icon>
+        </div>
+        <div class="stat-data">
+          <span class="stat-value">{{ weeklyEarnings | number:'1.0-0' }}</span>
+          <span class="stat-label">Cette semaine</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- PERFORMANCE HEBDOMADAIRE AVEC GRAPHIQUE -->
+    <div class="section-container">
+      <div class="section-header">
+        <div class="header-left">
+          <ion-icon name="stats-chart"></ion-icon>
+          <h3>Performance Hebdomadaire</h3>
+        </div>
+        <button class="refresh-chart" (click)="refreshChart()">
+          <ion-icon name="sync"></ion-icon>
+        </button>
+      </div>
+
+      <div class="chart-card">
+        <div class="chart-container">
+          <canvas #weeklyChart></canvas>
+        </div>
+        
+        <div class="chart-footer">
+          <div class="legend">
+            <div class="legend-dot"></div>
+            <span>Évolution du fonds (CDF)</span>
+          </div>
+          <div class="trend-indicator" [class.up]="weeklyGrowth > 0" [class.down]="weeklyGrowth < 0">
+            <ion-icon [name]="weeklyGrowth > 0 ? 'trending-up' : 'trending-down'"></ion-icon>
+            <span>{{ weeklyGrowth > 0 ? '+' : '' }}{{ weeklyGrowth | number:'1.1-1' }}%</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PUBLICATIONS / ANNONCES -->
+    <div class="section-container" *ngIf="publications.length > 0">
+      <div class="section-header">
+        <div class="header-left">
+          <ion-icon name="megaphone"></ion-icon>
+          <h3>Dernières annonces</h3>
+        </div>
+        <span class="badge-count">{{ publications.length }}</span>
+      </div>
+
+      <div class="publications-list">
+        <div class="publication-card" *ngFor="let pub of publications">
+          <div class="pub-type-icon" [class]="pub.type">
+            <ion-icon [name]="getIconName(pub.type)"></ion-icon>
+          </div>
+          <div class="pub-content-wrapper">
+            <div class="pub-header">
+              <h4>{{ pub.title }}</h4>
+              <span class="pub-date">{{ pub.created_at | date:'dd/MM/yyyy' }}</span>
+            </div>
+            <p class="pub-text">{{ pub.content }}</p>
+            <div class="pub-image-container" *ngIf="pub.image_url">
+              <img [src]="pub.image_url" alt="Illustration" class="pub-image">
+            </div>
+            <div class="pub-badge" [class]="pub.type">
+              {{ getTypeText(pub.type) }}
             </div>
           </div>
-          <div class="coin-stats">
-            <span class="price">92,400,000</span>
-            <span class="percent positive">+1.85%</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-container" *ngIf="publications.length === 0">
+      <div class="empty-state">
+        <div class="empty-icon">
+          <ion-icon name="newspaper"></ion-icon>
+        </div>
+        <h4>Aucune annonce</h4>
+        <p>Revenez plus tard pour les dernières actualités</p>
+      </div>
+    </div>
+
+    <!-- MARCHÉS & TENDANCES -->
+    <div class="section-container">
+      <div class="section-header">
+        <div class="header-left">
+          <ion-icon name="trending-up"></ion-icon>
+          <h3>Tendances du Marché</h3>
+        </div>
+        <span class="live-badge">
+          <span class="live-dot"></span>
+          EN DIRECT
+        </span>
+      </div>
+
+      <div class="market-list">
+        <div class="market-card">
+          <div class="coin-info">
+            <div class="coin-icon bitcoin"><span>₿</span></div>
+            <div class="coin-details">
+              <h4>Bitcoin</h4>
+              <p>BTC/CDF</p>
+            </div>
+          </div>
+          <div class="price-info">
+            <span class="current-price">92,4M</span>
+            <div class="price-change positive">
+              <ion-icon name="arrow-up"></ion-icon>
+              <span>+1.85%</span>
+            </div>
           </div>
         </div>
 
-        <div class="market-item">
+        <div class="market-card">
           <div class="coin-info">
-            <div class="coin-icon eth">Ξ</div>
-            <div>
+            <div class="coin-icon ethereum"><span>Ξ</span></div>
+            <div class="coin-details">
               <h4>Ethereum</h4>
-              <p>ETH / CDF</p>
+              <p>ETH/CDF</p>
             </div>
           </div>
-          <div class="coin-stats">
-            <span class="price">6,200,500</span>
-            <span class="percent positive">+0.92%</span>
+          <div class="price-info">
+            <span class="current-price">6,20M</span>
+            <div class="price-change positive">
+              <ion-icon name="arrow-up"></ion-icon>
+              <span>+0.92%</span>
+            </div>
           </div>
+        </div>
+
+        <div class="market-card">
+          <div class="coin-info">
+            <div class="coin-icon usdt"><span>$</span></div>
+            <div class="coin-details">
+              <h4>Tether</h4>
+              <p>USDT/CDF</p>
+            </div>
+          </div>
+          <div class="price-info">
+            <span class="current-price">2,850</span>
+            <div class="price-change neutral">
+              <ion-icon name="remove"></ion-icon>
+              <span>0.00%</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CLASSEMENT DES UTILISATEURS -->
+    <div class="section-container">
+      <div class="section-header">
+        <div class="header-left">
+          <ion-icon name="trophy-outline"></ion-icon>
+          <h3>🏆 Classement</h3>
+        </div>
+        <span class="live-badge">
+          <span class="live-dot"></span>
+          EN DIRECT
+        </span>
+      </div>
+
+      <div class="ranking-tabs">
+        <div class="ranking-tab" [class.active]="activeRankingTab === 'investors'" (click)="activeRankingTab = 'investors'">
+          <ion-icon name="wallet-outline"></ion-icon>
+          <span>Top Investisseurs</span>
+        </div>
+        <div class="ranking-tab" [class.active]="activeRankingTab === 'depositors'" (click)="activeRankingTab = 'depositors'">
+          <ion-icon name="trending-up-outline"></ion-icon>
+          <span>Top Déposants</span>
+        </div>
+        <div class="ranking-tab" [class.active]="activeRankingTab === 'referrers'" (click)="activeRankingTab = 'referrers'">
+          <ion-icon name="people-outline"></ion-icon>
+          <span>Top Parrainages</span>
+        </div>
+      </div>
+
+      <div class="ranking-list">
+        <div class="ranking-card" *ngIf="activeRankingTab === 'investors'">
+          <div class="ranking-item" *ngFor="let investor of topInvestors; let i = index">
+            <div class="rank-number" [class]="getRankClass(i + 1)">
+              <span>{{ i + 1 }}</span>
+            </div>
+            <div class="rank-info">
+              <div class="rank-user">
+                <span class="user-phone">{{ investor.phone | maskPhone }}</span>
+                <div class="vip-tag-small" *ngIf="investor.vip_level > 0">VIP {{ investor.vip_level }}</div>
+              </div>
+              <div class="rank-stats">
+                <ion-icon name="cash-outline"></ion-icon>
+                <span>{{ investor.solde | number }} CDF</span>
+              </div>
+            </div>
+            <div class="rank-medal" *ngIf="i === 0"><ion-icon name="medal-outline"></ion-icon></div>
+          </div>
+          <div class="empty-ranking" *ngIf="topInvestors.length === 0"><p>Aucun investisseur pour le moment</p></div>
+        </div>
+
+        <div class="ranking-card" *ngIf="activeRankingTab === 'depositors'">
+          <div class="ranking-item" *ngFor="let depositor of topDepositors; let i = index">
+            <div class="rank-number" [class]="getRankClass(i + 1)"><span>{{ i + 1 }}</span></div>
+            <div class="rank-info">
+              <div class="rank-user">
+                <span class="user-phone">{{ depositor.phone | maskPhone }}</span>
+                <div class="vip-tag-small" *ngIf="depositor.vip_level > 0">VIP {{ depositor.vip_level }}</div>
+              </div>
+              <div class="rank-stats">
+                <ion-icon name="add-circle-outline"></ion-icon>
+                <span>{{ depositor.montant | number }} CDF</span>
+              </div>
+            </div>
+            <div class="rank-medal" *ngIf="i === 0"><ion-icon name="medal-outline"></ion-icon></div>
+          </div>
+          <div class="empty-ranking" *ngIf="topDepositors.length === 0"><p>Aucun déposant pour le moment</p></div>
+        </div>
+
+        <div class="ranking-card" *ngIf="activeRankingTab === 'referrers'">
+          <div class="ranking-item" *ngFor="let referrer of topReferrers; let i = index">
+            <div class="rank-number" [class]="getRankClass(i + 1)"><span>{{ i + 1 }}</span></div>
+            <div class="rank-info">
+              <div class="rank-user">
+                <span class="user-phone">{{ referrer.phone | maskPhone }}</span>
+                <div class="vip-tag-small" *ngIf="referrer.vip_level > 0">VIP {{ referrer.vip_level }}</div>
+              </div>
+              <div class="rank-stats">
+                <ion-icon name="people-outline"></ion-icon>
+                <span>{{ referrer.count }} parrainages</span>
+              </div>
+            </div>
+            <div class="rank-medal" *ngIf="i === 0"><ion-icon name="medal-outline"></ion-icon></div>
+          </div>
+          <div class="empty-ranking" *ngIf="topReferrers.length === 0"><p>Aucun parrainage pour le moment</p></div>
         </div>
       </div>
     </div>

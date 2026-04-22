@@ -1,49 +1,108 @@
-<ion-content [fullscreen]="true">
+<ion-content [fullscreen]="true" (click)="closeCountryList()">
   <div class="auth-container">
     
     <!-- Header -->
     <div class="header-section">
+      <div class="back-btn" (click)="goToLogin()">
+        <ion-icon name="arrow-back-outline"></ion-icon>
+        <span>Retour</span>
+      </div>
       <div class="logo-wrapper">
-        <div class="custom-logo"></div>
+        <div class="logo-image">
+          <img src="assets/logo.png" style="width: 80px;">
+        </div>
         <h1>EVOLIX</h1>
       </div>
       <div class="gold-divider"></div>
       <h2 class="page-title">Mot de passe oublié</h2>
+      <p class="subtitle">Réinitialisez votre code d'accès</p>
     </div>
 
     <!-- Form -->
     <div class="form-section">
 
-      <!-- Téléphone -->
-      <div class="input-group">
-        <div class="phone-prefix">
-          <span>+243</span>
-          <ion-icon name="chevron-down-outline"></ion-icon>
+      <!-- Téléphone avec sélecteur de pays -->
+      <div class="input-group phone-group">
+        <div class="country-select" (click)="toggleCountryList(); $event.stopPropagation()">
+          <div class="flag-box">
+            <img [src]="selectedCountry.flag" class="flag">
+          </div>
+          <span class="code">{{ selectedCountry.dialCode }}</span>
+          <ion-icon name="chevron-down-outline" class="arrow"></ion-icon>
         </div>
-        <input type="tel" placeholder="Votre numéro de téléphone">
+
+        <input 
+          type="tel"
+          [(ngModel)]="phone"
+          placeholder="Votre numéro"
+          (focus)="closeCountryList()"
+        >
       </div>
 
-      <!-- Nouveau code -->
+      <!-- Liste des pays -->
+      <div class="country-list" *ngIf="showCountries">
+        <div 
+          class="country-item"
+          *ngFor="let c of countries"
+          (click)="selectCountry(c); $event.stopPropagation()"
+        >
+          <img [src]="c.flag" class="flag">
+          <span class="name">{{ c.name }}</span>
+          <span class="code">{{ c.dialCode }}</span>
+        </div>
+      </div>
+
+      <!-- Nouveau mot de passe -->
       <div class="input-group">
-        <label>Nouveau</label>
-        <input type="password" placeholder="••••••">
+        <label>Nouveau code</label>
+        <input 
+          type="password" 
+          [(ngModel)]="newPassword"
+          placeholder="••••••"
+          [type]="showPassword ? 'text' : 'password'"
+        >
+        <div class="password-toggle" (click)="showPassword = !showPassword">
+          <ion-icon [name]="showPassword ? 'eye-off-outline' : 'eye-outline'"></ion-icon>
+        </div>
       </div>
 
-      <!-- Confirmer -->
+      <!-- Confirmer le mot de passe -->
       <div class="input-group">
-        <label>Confirmer</label>
-        <input type="password" placeholder="••••••">
+        <label>Confirmer le code</label>
+        <input 
+          type="password" 
+          [(ngModel)]="confirmPassword"
+          placeholder="••••••"
+          [type]="showConfirmPassword ? 'text' : 'password'"
+        >
+        <div class="password-toggle" (click)="showConfirmPassword = !showConfirmPassword">
+          <ion-icon [name]="showConfirmPassword ? 'eye-off-outline' : 'eye-outline'"></ion-icon>
+        </div>
       </div>
 
-      <!-- Bouton -->
-      <button class="btn-gold-grad">RÉINITIALISER</button>
+      <!-- Messages d'erreur/succès -->
+      <div class="error-msg" *ngIf="errorMessage">
+        <ion-icon name="alert-circle-outline"></ion-icon>
+        {{ errorMessage }}
+      </div>
 
-      <!-- Retour login -->
+      <div class="success-msg" *ngIf="successMessage">
+        <ion-icon name="checkmark-circle-outline"></ion-icon>
+        {{ successMessage }}
+      </div>
+
+      <!-- Bouton de réinitialisation -->
+      <button class="btn-gold-grad" (click)="resetPassword()" [disabled]="isLoading">
+        <ion-icon *ngIf="isLoading" name="reload-outline" class="spinner"></ion-icon>
+        {{ isLoading ? 'Réinitialisation...' : 'RÉINITIALISER' }}
+      </button>
+
+      <!-- Retour vers la connexion -->
       <div class="footer-links">
         <span class="line"></span>
         <p>
-          Retour ?
-          <span><a href="/tabs/login">Se connecter</a></span>
+          Retour ? 
+          <a (click)="goToLogin()">Se connecter</a>
         </p>
         <span class="line"></span>
       </div>

@@ -1,91 +1,105 @@
-ion-tab-bar {
-    --background: #000;
-    background: radial-gradient(circle at center, #1a140e 0%, #000000 100%);
-    border-top: 1px solid rgba(243, 208, 120, 0.1);
-    height: 75px;
-    box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.9);
+/* tabs.page.scss - Design Floating Ultra Premium */
+
+ion-tabs {
+  background: #000; // Na ny background an'ny app-nao
 }
 
-ion-tab-button {
-    --color: #555; /* Couleur icône non sélectionnée */
-    --color-selected: #f3d078;
-    background: transparent;
-    transition: 0.3s ease-in-out;
-
-    /* Conteneur de l'icône pour gérer l'animation */
-    .icon-wrapper {
-        position: relative;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 40px;
-        height: 35px;
-        transition: 0.3s;
-        
-        ion-icon {
-            font-size: 26px;
-            transition: 0.3s;
-        }
-    }
-
-    ion-label {
-        font-size: 10px;
-        font-weight: 700;
-        margin-top: 4px;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-        opacity: 0.6;
-        transition: 0.3s;
-    }
+.premium-tab-bar {
+  /* Eto no mampihantona azy */
+  --background: transparent;
+  background: linear-gradient(135deg, 
+    rgba(20, 20, 25, 0.9) 0%,
+    rgba(10, 10, 12, 0.98) 100%);
+  
+  // Floating position
+  position: absolute;
+  bottom: 20px; 
+  left: 15px;
+  right: 15px;
+  width: auto;
+  
+  // Style moderne
+  height: 70px;
+  border-radius: 25px; // Boribory tsara
+  border: 1px solid rgba(243, 208, 120, 0.3); // Border "Gold" manify
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  
+  // Esory ny default border an'ny ionic
+  border-top: 1px solid rgba(243, 208, 120, 0.3) !important; 
+  padding: 0 10px;
+  overflow: hidden;
 }
 
-/* --- STYLE DE L'ONGLET SÉLECTIONNÉ --- */
-ion-tab-button.tab-selected {
+.tab-btn {
+  --color: #a0a0a0;
+  --color-selected: #f3d078;
+  --background: transparent;
+  --ripple-color: rgba(243, 208, 120, 0.1);
+  
+  transition: all 0.3s ease;
+
+  .tab-icon-wrapper {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 45px;
+    width: 45px;
+    margin-bottom: 2px;
     
-    .icon-wrapper {
-        transform: translateY(-8px); /* L'icône monte plus haut */
-        
-        /* Halo lumineux derrière l'icône */
-        &::after {
-            content: "";
-            position: absolute;
-            width: 35px;
-            height: 35px;
-            background: rgba(243, 208, 120, 0.15);
-            border-radius: 50%;
-            filter: blur(12px);
-            z-index: -1;
-        }
-        
-        ion-icon {
-            /* Effet Gold Gradient sur l'icône */
-            color: #f3d078;
-            filter: drop-shadow(0 0 5px rgba(243, 208, 120, 0.8)) 
-                    drop-shadow(0 0 15px rgba(193, 148, 51, 0.4));
-        }
+    .tab-icon {
+      font-size: 24px;
+      // Ampiasao ny "sharp" na "filled" icons amin'ny selected
+      transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
+  }
 
-    ion-label {
-        opacity: 1;
-        color: #f3d078;
-        transform: scale(1.1); /* Le texte grossit légèrement */
-        text-shadow: 0 0 5px rgba(243, 208, 120, 0.3);
-    }
-
-    /* Petite barre de soulignement stylée */
-    &::before {
-        content: "";
-        position: absolute;
-        bottom: 12px;
-        width: 15px;
-        height: 2px;
-        background: linear-gradient(90deg, transparent, #f3d078, transparent);
-        border-radius: 10px;
-        box-shadow: 0 0 8px #f3d078;
-    }
+  ion-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    transition: 0.3s;
+  }
 }
 
-/* Animation au toucher */
-ion-tab-button:active .icon-wrapper {
-    transform: translateY(-8px) scale(0.85);
+/* --- REHEFA VOAFIDY (SELECTED) --- */
+.tab-btn.tab-selected {
+  .tab-icon-wrapper {
+    .tab-icon {
+      transform: scale(1.1) translateY(-2px);
+      color: #f3d078;
+      filter: drop-shadow(0 0 8px rgba(243, 208, 120, 0.4));
+    }
+    
+    &::after {
+      content: '';
+      position: absolute;
+      width: 40px;
+      height: 40px;
+      background: rgba(243, 208, 120, 0.1);
+      border-radius: 15px;
+      z-index: -1;
+      animation: iconBoxPop 0.4s ease-out;
+    }
+  }
+
+  ion-label {
+    color: #f3d078;
+    transform: scale(1.05);
+  }
+}
+
+@keyframes iconBoxPop {
+  0% { transform: scale(0.5); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+/* Esory ny vovoka fotsy ambany amin'ny iOS */
+ion-tab-bar {
+  --border: 0;
+  contain: none;
 }

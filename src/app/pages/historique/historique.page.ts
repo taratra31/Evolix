@@ -8,7 +8,7 @@ import {
   timeOutline, receiptOutline 
 } from 'ionicons/icons';
 import { TransactionService } from '../../services/transactions/transaction.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-historique',
@@ -24,7 +24,8 @@ export class HistoriquePage implements OnInit {
   constructor(
     private transactionService: TransactionService,
     private route: ActivatedRoute,
-    private navCtrl: NavController
+    private navCtrl: NavController,
+    public router: Router
   ) {
     addIcons({ 
       arrowBackOutline, arrowDownOutline, arrowUpOutline, 

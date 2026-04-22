@@ -253,3 +253,34 @@ ion-content {
         a { color: #d4af37; text-decoration: none; font-weight: 600; margin-left: 5px; }
     }
 }
+// Ampio izao style izao ao amin'ny fichier SCSS
+
+/* Forgot password link */
+.forgot-password-link {
+  text-align: right;
+  margin: -10px 0 20px 0;
+  
+  a {
+    color: #f3d078;
+    font-size: 12px;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.3s;
+    
+    &:hover {
+      text-decoration: underline;
+      color: #ffd700;
+    }
+  }
+}
+
+/* Error message */
+.error-msg {
+  color: #ef4444;
+  font-size: 13px;
+  text-align: center;
+  margin-top: 15px;
+  padding: 10px;
+  background: rgba(239, 68, 68, 0.1);
+  border-radius: 10px;
+}

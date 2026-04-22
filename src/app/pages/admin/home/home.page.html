@@ -1,0 +1,151 @@
+<ion-content [fullscreen]="true" class="admin-content">
+  
+  <div class="admin-spotlight"></div>
+
+  <div class="main-wrapper">
+    <!-- Header Admin -->
+    <div class="admin-header">
+      <div class="logo-section">
+        <img src="assets/logo.png" alt="Logo" class="logo">
+        <h1>EVOLIX <span>ADMIN</span></h1>
+      </div>
+      <div class="header-actions">
+        <!-- <div class="admin-badge">
+          <ion-icon name="shield-checkmark-outline"></ion-icon>
+          <span>Administrateur</span>
+        </div> -->
+      </div>
+    </div>
+
+    <!-- 🔥 BOUTON RETOUR - Asiana emplacement tsara kokoa -->
+    <div class="back-navigation">
+      <div class="back-btn" (click)="goBackToCompte()">
+        <ion-icon name="arrow-back-outline"></ion-icon>
+        <span>Retour à mon compte</span>
+      </div>
+    </div>
+
+    <div class="gold-line"></div>
+
+    <!-- Stats Cards -->
+   <!-- Stats Cards -->
+<div class="stats-grid">
+  <div class="stat-card" (click)="goTo('utilisateur')">
+    <div class="stat-icon purple">
+      <ion-icon name="people-outline"></ion-icon>
+    </div>
+    <div class="stat-info">
+      <h3>{{ totalUsers }}</h3>
+      <p>Utilisateurs</p>
+    </div>
+  </div>
+
+  <div class="stat-card" (click)="goTo('transactions')">
+    <div class="stat-icon gold">
+      <ion-icon name="swap-horizontal-outline"></ion-icon>
+    </div>
+    <div class="stat-info">
+      <h3>{{ totalTransactions }}</h3>
+      <p>Transactions</p>
+    </div>
+  </div>
+
+  <div class="stat-card" (click)="goTo('publications')">
+    <div class="stat-icon blue">
+      <ion-icon name="newspaper-outline"></ion-icon>
+    </div>
+    <div class="stat-info">
+      <h3>{{ totalPublications }}</h3>
+      <p>Publications</p>
+    </div>
+  </div>
+
+  <div class="stat-card">
+    <div class="stat-icon green">
+      <ion-icon name="cash-outline"></ion-icon>
+    </div>
+    <div class="stat-info">
+      <h3>{{ (totalVolume / 1000) | number:'1.0-0' }}K</h3>
+      <p>Volume (CDF)</p>
+    </div>
+  </div>
+</div>
+    <!-- Navigation Rapide -->
+    <div class="quick-nav">
+      <div class="nav-item" (click)="goTo('utilisateur')">
+        <ion-icon name="people-circle-outline"></ion-icon>
+        <span>Utilisateurs</span>
+      </div>
+      <div class="nav-item" (click)="goTo('transactions')">
+        <ion-icon name="receipt-outline"></ion-icon>
+        <span>Transactions</span>
+      </div>
+      <div class="nav-item" (click)="goTo('publications')">
+        <ion-icon name="megaphone-outline"></ion-icon>
+        <span>Publications</span>
+      </div>
+       <div class="nav-item" (click)="goTo('number')">
+    <ion-icon name="call-outline"></ion-icon>
+    <span>Numéros</span>
+  </div>
+      <div class="nav-item" (click)="logout()">
+        <ion-icon name="log-out-outline"></ion-icon>
+        <span>Déconnexion</span>
+      </div>
+    </div>
+
+    <!-- Dernières Transactions -->
+    <div class="section-header">
+      <h3>📋 Dernières Transactions</h3>
+      <span class="view-all" (click)="goTo('transactions')">Tout voir</span>
+    </div>
+
+    <div class="transactions-list">
+      <div class="transaction-item" *ngFor="let trans of recentTransactions">
+        <div class="trans-icon" [ngClass]="trans.type">
+          <ion-icon [name]="trans.type === 'depot' ? 'arrow-down-outline' : 'arrow-up-outline'"></ion-icon>
+        </div>
+        <div class="trans-info">
+          <h4>{{ trans.user_name || 'Utilisateur' }}</h4>
+          <p>{{ trans.created_at | date:'dd/MM/yyyy HH:mm' }}</p>
+        </div>
+        <div class="trans-amount" [ngClass]="trans.status">
+          <span>{{ trans.montant | number }} CDF</span>
+          <span class="status-badge" [ngClass]="trans.status">{{ trans.status }}</span>
+        </div>
+      </div>
+
+      <div class="empty-state" *ngIf="recentTransactions.length === 0">
+        <ion-icon name="receipt-outline"></ion-icon>
+        <p>Aucune transaction récente</p>
+      </div>
+    </div>
+
+    <!-- Derniers Utilisateurs -->
+    <div class="section-header">
+      <h3>👥 Nouveaux Utilisateurs</h3>
+      <span class="view-all" (click)="goTo('utilisateur')">Tout voir</span>
+    </div>
+
+    <div class="users-list">
+      <div class="user-item" *ngFor="let user of recentUsers">
+        <div class="user-avatar">
+          <ion-icon name="person-circle-outline"></ion-icon>
+        </div>
+        <div class="user-info">
+          <h4>{{ user['phone'] }}</h4>
+          <p>VIP {{ user['vip_level'] || 0 }} | Inscrit le {{ user['created_at'] | date:'dd/MM/yyyy' }}</p>
+        </div>
+        <div class="user-status" [ngClass]="user['vip_level'] > 0 ? 'vip' : 'normal'">
+          {{ user['vip_level'] > 0 ? 'VIP' : 'Standard' }}
+        </div>
+      </div>
+
+      <div class="empty-state" *ngIf="recentUsers.length === 0">
+        <ion-icon name="people-outline"></ion-icon>
+        <p>Aucun utilisateur récent</p>
+      </div>
+    </div>
+
+  </div>
+</ion-content>

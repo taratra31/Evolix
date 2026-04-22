@@ -1,75 +1,220 @@
 <ion-content>
   <div class="modal-container">
-    <h2 class="modal-title">
-      {{ type === 'depot' ? 'DÉPÔT / RECHARGE' : 'RETRAIT / RETRAIT' }}
-    </h2>
-    <div class="gold-line"></div>
-
-    <!-- 1. SAFIDY OPERATEUR (Mitovy ho an'ny roa) -->
-    <p class="label-mini">1. Choisir l'opérateur</p>
-    <div class="operator-grid">
-      <div *ngFor="let op of ['orange', 'airtel', 'vodacom']" 
-           class="op-item" 
-           [class.selected]="operateur === op"
-           (click)="selectOperateur(op)">
-        <img [src]="'https://cdn.worldvectorlogo.com/logos/' + (op==='orange'?'orange-1':op) + '.svg'" class="op-logo">
+    
+    <!-- Header avec effet glass -->
+    <div class="modal-header">
+      <div class="header-glow"></div>
+      <div class="close-btn" (click)="close()">
+        <ion-icon name="close-outline"></ion-icon>
       </div>
+      <div class="icon-wrapper" [class.depot]="type === 'depot'" [class.retrait]="type === 'retrait'">
+        <ion-icon [name]="type === 'depot' ? 'add-circle' : 'arrow-down-circle'"></ion-icon>
+      </div>
+      <h2 class="modal-title">
+        {{ type === 'depot' ? 'Dépôt d\'argent' : 'Retrait d\'argent' }}
+      </h2>
+      <p class="modal-subtitle">{{ type === 'depot' ? 'Rechargez votre portefeuille' : 'Retirez vos fonds en toute sécurité' }}</p>
     </div>
 
-    <!-- ================= SECTION DÉPÔT ================= -->
-    <div *ngIf="type === 'depot' && operateur">
-      <p class="label-mini">2. Envoyer l'argent vers ce numéro :</p>
-      <div class="copy-box">
-        <span class="phone-number">{{ getNumero(operateur) }}</span>
-        <button class="btn-copy-gold" (click)="copyNumber()">
-          <ion-icon name="copy-outline"></ion-icon> COPIER
+    <!-- Loader Premium -->
+    <div *ngIf="isLoading" class="loader-premium">
+      <div class="loader-ring"></div>
+      <div class="loader-ring"></div>
+      <div class="loader-ring"></div>
+      <p>Chargement sécurisé...</p>
+    </div>
+
+    <!-- Contenu principal -->
+    <ng-container *ngIf="!isLoading">
+      
+      <!-- Étape 1: Opérateur -->
+      <div class="step-container">
+        <div class="step-number">1</div>
+        <div class="step-content">
+          <span class="step-title">Choisissez votre opérateur</span>
+          <div class="operator-grid">
+            <div *ngFor="let op of operators" 
+                 class="operator-card" 
+                 [class.selected]="operateur === op.value"
+                 (click)="selectOperateur(op.value)">
+              <div class="operator-icon" [class]="op.value">
+                <img [src]="op.logo" [alt]="op.name">
+              </div>
+              <span class="operator-name">{{ op.name }}</span>
+              <div class="check-indicator" *ngIf="operateur === op.value">
+                <ion-icon name="checkmark-circle"></ion-icon>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Étape 2: Détails de la transaction -->
+      <div class="step-container" *ngIf="operateur">
+        <div class="step-number">2</div>
+        <div class="step-content">
+          <span class="step-title">{{ type === 'depot' ? 'Effectuez le paiement' : 'Informations de retrait' }}</span>
+          
+          <!-- SECTION DÉPÔT -->
+          <div *ngIf="type === 'depot'">
+            <!-- Numéro de collecte -->
+            <div class="info-card">
+              <div class="info-label">
+                <ion-icon name="phone-portrait-outline"></ion-icon>
+                <span>Numéro de collecte</span>
+              </div>
+              <div class="info-value-wrapper">
+                <div class="info-value">{{ getNumero(operateur) }}</div>
+                <button class="copy-btn" (click)="copyNumber()">
+                  <ion-icon name="copy-outline"></ion-icon>
+                  <span>Copier</span>
+                </button>
+              </div>
+              <div class="info-hint">
+                <ion-icon name="information-circle-outline"></ion-icon>
+                <span>Envoyez l'argent à ce numéro via Mobile Money</span>
+              </div>
+            </div>
+
+            <!-- Montant -->
+            <div class="input-group" [class.error]="montantError">
+              <label>
+                <ion-icon name="cash-outline"></ion-icon>
+                Montant à envoyer (CDF)
+              </label>
+              <input type="number" [(ngModel)]="montant" 
+                     (ngModelChange)="validateMontant()"
+                     placeholder="Ex: 10 000"
+                     [class.error]="montantError">
+              <div class="input-error" *ngIf="montantError">
+                <ion-icon name="alert-circle-outline"></ion-icon>
+                {{ montantError }}
+              </div>
+              <div class="input-hint" *ngIf="!montantError">
+                <ion-icon name="flash-outline"></ion-icon>
+                Minimum 1 000 CDF
+              </div>
+            </div>
+
+            <!-- Transaction ID -->
+            <div class="input-group" [class.error]="transactionIdError">
+              <label>
+                <ion-icon name="document-text-outline"></ion-icon>
+                ID de transaction
+              </label>
+              <input type="text" [(ngModel)]="transactionId" 
+                     (ngModelChange)="validateTransactionId()"
+                     placeholder="Ex: REF123456789"
+                     [class.error]="transactionIdError">
+              <div class="input-error" *ngIf="transactionIdError">
+                <ion-icon name="alert-circle-outline"></ion-icon>
+                {{ transactionIdError }}
+              </div>
+              <div class="input-hint" *ngIf="!transactionIdError">
+                <ion-icon name="information-circle-outline"></ion-icon>
+                L'ID reçu par SMS après votre paiement
+              </div>
+            </div>
+          </div>
+
+          <!-- SECTION RETRAIT -->
+          <div *ngIf="type === 'retrait'">
+            <!-- Carte VIP Info -->
+            <div class="vip-card" [class]="'vip-' + getVipLevelNumber()">
+              <div class="vip-icon">
+                <ion-icon name="diamond-outline"></ion-icon>
+              </div>
+              <div class="vip-info">
+                <span class="vip-label">Votre niveau</span>
+                <strong class="vip-level">{{ userVipName }}</strong>
+              </div>
+              <div class="vip-limits">
+                <div class="limit-item">
+                  <span>Min</span>
+                  <strong>{{ getVipLimits().min | number }} CDF</strong>
+                </div>
+                <div class="limit-item">
+                  <span>Max</span>
+                  <strong>{{ getVipLimits().max | number }} CDF</strong>
+                </div>
+              </div>
+            </div>
+
+            <!-- Montant -->
+            <div class="input-group" [class.error]="montantError">
+              <label>
+                <ion-icon name="cash-outline"></ion-icon>
+                Montant à retirer (CDF)
+              </label>
+              <input type="number" [(ngModel)]="montant" 
+                     (ngModelChange)="validateMontant()"
+                     [placeholder]="'Minimum : ' + (getVipLimits().min | number)"
+                     [class.error]="montantError">
+              <div class="input-error" *ngIf="montantError">
+                <ion-icon name="alert-circle-outline"></ion-icon>
+                {{ montantError }}
+              </div>
+              <div class="input-hint" *ngIf="!montantError && montant && montant >= getVipLimits().min">
+                <ion-icon name="checkmark-circle-outline"></ion-icon>
+                Montant valide pour votre niveau
+              </div>
+              <div class="input-hint" *ngIf="!montantError && (!montant || montant < getVipLimits().min)">
+                <ion-icon name="arrow-up-outline"></ion-icon>
+                Minimum {{ getVipLimits().min | number }} CDF - Maximum {{ getVipLimits().max | number }} CDF
+              </div>
+            </div>
+
+            <!-- Numéro de réception -->
+            <div class="input-group" [class.error]="phoneError">
+              <label>
+                <ion-icon name="call-outline"></ion-icon>
+                Votre numéro {{ operateur | titlecase }}
+              </label>
+              <input type="tel" [(ngModel)]="userPhone" 
+                     (ngModelChange)="validatePhone()"
+                     placeholder="Ex: 08XXXXXXXX"
+                     [class.error]="phoneError">
+              <div class="input-error" *ngIf="phoneError">
+                <ion-icon name="alert-circle-outline"></ion-icon>
+                {{ phoneError }}
+              </div>
+              <div class="input-hint" *ngIf="!phoneError">
+                <ion-icon name="shield-checkmark-outline"></ion-icon>
+                Numéro où vous recevrez l'argent
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Actions -->
+      <div class="actions-container" *ngIf="operateur">
+        <button class="btn-primary" 
+                [disabled]="!isFormValid()" 
+                (click)="confirm()"
+                [class.loading]="isSubmitting">
+          <div class="btn-content" *ngIf="!isSubmitting">
+            <ion-icon [name]="type === 'depot' ? 'checkmark-circle' : 'send-outline'"></ion-icon>
+            <span>{{ type === 'depot' ? 'Confirmer le dépôt' : 'Confirmer le retrait' }}</span>
+          </div>
+          <div class="btn-loader" *ngIf="isSubmitting">
+            <div class="spinner"></div>
+            <span>Traitement...</span>
+          </div>
+        </button>
+        
+        <button class="btn-secondary" (click)="close()">
+          <ion-icon name="close-outline"></ion-icon>
+          Annuler
         </button>
       </div>
 
-      <div class="form-inputs">
-        <div class="input-group">
-          <label>Montant envoyé (CDF)</label>
-          <input type="number" [(ngModel)]="montant" placeholder="Ex: 10000">
-        </div>
-        <div class="input-group">
-          <label>ID de la Transaction (Reference)</label>
-          <input type="text" [(ngModel)]="transactionId" placeholder="Entrez l'ID reçu par SMS">
-        </div>
+      <!-- Message d'erreur global -->
+      <div class="global-error" *ngIf="globalError">
+        <ion-icon name="warning-outline"></ion-icon>
+        <span>{{ globalError }}</span>
       </div>
-    </div>
 
-    <!-- ================= SECTION RETRAIT ================= -->
-    <div *ngIf="type === 'retrait' && operateur">
-      <p class="label-mini">2. Infos pour le retrait :</p>
-      <div class="form-inputs">
-        <div class="input-group">
-          <label>Montant à retirer (CDF)</label>
-          <input type="number" [(ngModel)]="montant" placeholder="Ex: 5000">
-        </div>
-        <div class="input-group">
-          <label>Votre numéro {{ operateur | titlecase }}</label>
-          <input type="tel" [(ngModel)]="userPhone" placeholder="Ex: 08XXXXXXXX">
-        </div>
-      </div>
-    </div>
-
-    <!-- 4. BUTTON ACTIONS -->
-    <div class="actions-footer">
-      <!-- Raha Dépôt -->
-      <button *ngIf="type === 'depot'" class="btn-pay" 
-              [disabled]="!operateur || !montant || !transactionId" 
-              (click)="confirm()">
-        <ion-icon name="checkmark-circle-outline"></ion-icon> J'AI PAYÉ
-      </button>
-
-      <!-- Raha Retrait -->
-      <button *ngIf="type === 'retrait'" class="btn-pay" 
-              [disabled]="!operateur || !montant || !userPhone" 
-              (click)="confirm()">
-        <ion-icon name="cash-outline"></ion-icon> CONFIRMER LE RETRAIT
-      </button>
-      
-      <button class="btn-close" (click)="close()">Annuler</button>
-    </div>
+    </ng-container>
   </div>
 </ion-content>

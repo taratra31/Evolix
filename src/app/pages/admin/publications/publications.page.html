@@ -1,0 +1,146 @@
+<ion-content [fullscreen]="true" class="publications-content">
+  
+  <div class="publications-spotlight"></div>
+
+  <div class="main-wrapper">
+    <!-- Header -->
+    <div class="page-header">
+      <div class="back-navigation">
+        <div class="back-btn" (click)="goBack()">
+          <ion-icon name="arrow-back-outline"></ion-icon>
+          <span>Retour</span>
+        </div>
+      </div>
+      <div class="header-title">
+        <h1>📢 Publications</h1>
+        <p>Gérez les annonces et actualités</p>
+      </div>
+    </div>
+
+    <div class="gold-line"></div>
+
+    <!-- Button Add Publication -->
+    <div class="add-publication-btn">
+      <button class="btn-add" (click)="openAddPublicationModal()">
+        <ion-icon name="add-outline"></ion-icon>
+        <span>Nouvelle publication</span>
+      </button>
+    </div>
+
+    <!-- Publications List -->
+    <div class="publications-list">
+      <div class="publication-card" *ngFor="let pub of publications">
+        <div class="card-header">
+          <div class="pub-icon" [ngClass]="pub.type">
+            <ion-icon [name]="getIconName(pub.type)"></ion-icon>
+          </div>
+          <div class="pub-info">
+            <h3>{{ pub.title }}</h3>
+            <div class="pub-meta">
+              <span class="pub-date">
+                <ion-icon name="calendar-outline"></ion-icon>
+                {{ pub.created_at | date:'dd/MM/yyyy à HH:mm' }}
+              </span>
+              <span class="pub-type" [ngClass]="pub.type">
+                {{ getTypeText(pub.type) }}
+              </span>
+            </div>
+          </div>
+          <div class="pub-actions">
+            <button class="btn-edit" (click)="editPublication(pub)">
+              <ion-icon name="create-outline"></ion-icon>
+            </button>
+            <button class="btn-delete" (click)="deletePublication(pub)">
+              <ion-icon name="trash-outline"></ion-icon>
+            </button>
+          </div>
+        </div>
+        <div class="card-content">
+          <p>{{ pub.content }}</p>
+          <div class="pub-image" *ngIf="pub.image_url">
+            <img [src]="pub.image_url" alt="Publication image">
+          </div>
+        </div>
+      </div>
+
+      <!-- Empty State -->
+      <div class="empty-state" *ngIf="publications.length === 0">
+        <div class="empty-icon">
+          <ion-icon name="newspaper-outline"></ion-icon>
+        </div>
+        <p>Aucune publication pour le moment</p>
+        <button class="btn-add-empty" (click)="openAddPublicationModal()">
+          Créer la première publication
+        </button>
+      </div>
+    </div>
+
+  </div>
+</ion-content>
+
+<!-- Modal pour ajouter/modifier une publication -->
+<ion-modal [isOpen]="isModalOpen" (didDismiss)="closeModal()">
+  <ng-template>
+    <div class="modal-container">
+      <div class="modal-header">
+        <h2>{{ isEditing ? 'Modifier' : 'Nouvelle' }} Publication</h2>
+        <button class="close-btn" (click)="closeModal()">
+          <ion-icon name="close-outline"></ion-icon>
+        </button>
+      </div>
+      <div class="modal-content">
+        <div class="input-group">
+          <label>Titre</label>
+          <input type="text" [(ngModel)]="formData.title" placeholder="Titre de la publication">
+        </div>
+        <div class="input-group">
+          <label>Contenu</label>
+          <textarea [(ngModel)]="formData.content" rows="5" placeholder="Contenu de la publication..."></textarea>
+        </div>
+        <div class="input-group">
+          <label>Type</label>
+          <div class="type-selector">
+            <div class="type-option" [class.active]="formData.type === 'info'" (click)="formData.type = 'info'">
+              <ion-icon name="information-circle-outline"></ion-icon>
+              <span>Info</span>
+            </div>
+            <div class="type-option" [class.active]="formData.type === 'warning'" (click)="formData.type = 'warning'">
+              <ion-icon name="warning-outline"></ion-icon>
+              <span>Alerte</span>
+            </div>
+            <div class="type-option" [class.active]="formData.type === 'success'" (click)="formData.type = 'success'">
+              <ion-icon name="checkmark-circle-outline"></ion-icon>
+              <span>Succès</span>
+            </div>
+            <div class="type-option" [class.active]="formData.type === 'event'" (click)="formData.type = 'event'">
+              <ion-icon name="calendar-outline"></ion-icon>
+              <span>Événement</span>
+            </div>
+          </div>
+        </div>
+        <div class="input-group">
+          <label>Image</label>
+          <div class="image-upload-area" *ngIf="!formData.image_url">
+            <!-- 🔥 FANITSIA: Manasa ny fichier -->
+            <input #fileInput type="file" accept="image/*" (change)="uploadImage($event)" hidden>
+             <button class="btn-upload" (click)="triggerFileInput()" [disabled]="isUploading">
+  <ion-icon name="cloud-upload-outline"></ion-icon>
+  <span>{{ isUploading ? 'Téléchargement...' : 'Choisir une image' }}</span>
+</button>
+            <p class="upload-hint">PNG, JPG, JPEG - Max 5MB</p>
+          </div>
+          <div class="image-preview" *ngIf="formData.image_url">
+            <img [src]="formData.image_url" alt="Aperçu">
+            <button class="btn-remove-image" (click)="removeImage()">
+              <ion-icon name="trash-outline"></ion-icon>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-cancel" (click)="closeModal()">Annuler</button>
+        <button class="btn-save" (click)="savePublication()">Publier</button>
+      </div>
+    </div>
+  </ng-template>
+</ion-modal>

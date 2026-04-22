@@ -25,6 +25,12 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/forgot-pass/forgot-pass.page').then(m => m.ForgotPassPage)
   },
 
+  // 🔥 NOTIFICATIONS - Apetraka eo ivelan'ny tabs mba ho azonao idirana avy na aiza na aiza
+  {
+    path: 'notifications',
+    loadComponent: () => import('./pages/notifications/notifications.page').then(m => m.NotificationsPage)
+  },
+
   {
     path: 'tabs',
     loadComponent: () => import('./tabs/tabs.page').then(m => m.TabsPage),
@@ -50,21 +56,40 @@ export const routes: Routes = [
         path: 'compte',
         loadComponent: () => import('./pages/compte/compte.page').then(m => m.ComptePage)
       },
-       {
-    path: 'historique/:type',
-    loadComponent: () => import('./pages/historique/historique.page').then( m => m.HistoriquePage)
-  },
+      {
+        path: 'historique/:type',
+        loadComponent: () => import('./pages/historique/historique.page').then(m => m.HistoriquePage)
+      },
     ],
   },
   
+  // 🔥 ADMIN ROUTES
+  {
+    path: 'home',
+    loadComponent: () => import('./pages/admin/home/home.page').then(m => m.HomePage)
+  },
+  {
+    path: 'transactions',
+    loadComponent: () => import('./pages/admin/transactions/transactions.page').then(m => m.TransactionsPage)
+  },
+  {
+    path: 'utilisateur',
+    loadComponent: () => import('./pages/admin/utilisateur/utilisateur.page').then(m => m.UtilisateurPage)
+  },
+  {
+    path: 'publications',
+    loadComponent: () => import('./pages/admin/publications/publications.page').then( m => m.PublicationsPage)
+  },
+    {
+    path: 'number',
+    loadComponent: () => import('./pages/admin/number/number.page').then( m => m.NumberPage)
+  },
+
+  // 🔥 Redirect any unknown path to splash
   {
     path: '**',
     redirectTo: 'splash'
   },
-  {
-    path: 'notifications',
-    loadComponent: () => import('./pages/notifications/notifications.page').then( m => m.NotificationsPage)
-  },
- 
 
+  
 ];

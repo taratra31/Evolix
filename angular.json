@@ -42,12 +42,17 @@
           "configurations": {
             "production": {
               "budgets": [
-  {
-    "type": "anyComponentStyle",
-    "maximumWarning": "5kb",
-    "maximumError": "10kb"
-  }
-],
+                {
+                  "type": "initial",
+                  "maximumWarning": "2MB",
+                  "maximumError": "5MB"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "20kB",
+                  "maximumError": "50kB"
+                }
+              ],
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
@@ -60,7 +65,14 @@
               "optimization": false,
               "extractLicenses": false,
               "sourceMap": true,
-              "namedChunks": true
+              "namedChunks": true,
+              "budgets": [
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "20kB",
+                  "maximumError": "50kB"
+                }
+              ]
             },
             "ci": {
               "progress": false
@@ -102,7 +114,8 @@
                 "glob": "**/*",
                 "input": "src/assets",
                 "output": "assets"
-              },"src/_redirects"
+              },
+              "src/_redirects"
             ],
             "styles": ["src/global.scss", "src/theme/variables.scss"],
             "scripts": []
