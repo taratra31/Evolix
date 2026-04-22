@@ -40,9 +40,9 @@ ion-header {
   padding-top: env(safe-area-inset-top, 20px);
 }
 
-ion-content {
-  --padding-top: 80px !important; 
-}
+// ion-content {
+//   --padding-top: 80px !important; 
+// }
 .custom-toast {
   --background: rgba(0, 0, 0, 0.9);
   --border-radius: 16px;

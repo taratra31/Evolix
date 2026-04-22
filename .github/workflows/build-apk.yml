@@ -33,6 +33,31 @@ jobs:
           npx cap add android
           npx cap sync android
 
+      # 🔥 Mamorona icon avy amin'ny assets/logo.png
+      - name: Generate App Icons
+        run: |
+          # Mamorona folder resources raha mbola tsy misy
+          mkdir -p resources
+          
+          # Raha misy logo.png ao amin'ny assets dia adika any resources
+          if [ -f "src/assets/logo.png" ]; then
+            cp src/assets/logo.png resources/icon.png
+            echo "✅ Logo hitako, adika any resources/icon.png"
+          else
+            echo "⚠️ Tsy misy logo.png ao amin'ny src/assets/"
+          fi
+          
+          # Mametraka cordova-res ary manamboatra icon ho an'ny Android
+          npm install -g cordova-res
+          cordova-res android --skip-config --copy --icon-source resources/icon.png 2>/dev/null || echo "Nampiasa default icon"
+        continue-on-error: true
+
+      # 🔥 Manova ny anaran'ny APK ao amin'ny build.gradle
+      - name: Set APK Name to EVOLIX
+        run: |
+          # Manampy archivesBaseName ao amin'ny build.gradle
+          sed -i '/defaultConfig {/a \        setProperty("archivesBaseName", "EVOLIX")' android/app/build.gradle
+
       - name: Build APK
         run: |
           cd android
@@ -42,9 +67,23 @@ jobs:
           ANDROID_HOME: /usr/local/lib/android/sdk
           ANDROID_SDK_ROOT: /usr/local/lib/android/sdk
 
+      # 🔥 Manova anarana ny APK vokatra (backup raha tsy mandeha ny archivesBaseName)
+      - name: Rename APK to EVOLIX.apk
+        run: |
+          if [ -f "android/app/build/outputs/apk/debug/app-debug.apk" ]; then
+            mv android/app/build/outputs/apk/debug/app-debug.apk android/app/build/outputs/apk/debug/EVOLIX.apk
+            echo "✅ APK novaina ho EVOLIX.apk"
+          fi
+        shell: bash
+
+      # 🔥 Manova ny app name ho EVOLIX (tsy app-debug)
+      - name: Set App Name in strings.xml
+        run: |
+          sed -i 's/<string name="app_name">.*<\/string>/<string name="app_name">EVOLIX<\/string>/g' android/app/src/main/res/values/strings.xml
+
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: EVOLIX-APK
-          path: android/app/build/outputs/apk/debug/*.apk
+          path: android/app/build/outputs/apk/debug/EVOLIX.apk
           if-no-files-found: error
