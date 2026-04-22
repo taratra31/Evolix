@@ -1,54 +1,26 @@
-name: Build EVOLIX APK
-on: push
+name: Build APK with Docker (Guaranteed)
+on: [push, workflow_dispatch]
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    container:
+      image: ionicteam/capacitor-android:latest  # Efa misy zava-drehetra!
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 22
-
-      - name: Setup Java
-        uses: actions/setup-java@v4
-        with:
-          distribution: 'temurin'
-          java-version: '17'
-
-      - name: Install Ionic & Dependencies
-        run: |
-          npm install -g @ionic/cli @capacitor/cli @capacitor/android
-          npm install
-
-      - name: Build Web App
-        run: ionic build --prod
-
-      - name: Prepare Android Platform
-        run: |
-          rm -rf android/
-          npx cap add android
-          npx cap sync android
-
-      - name: Generate Assets
-        run: npx capacitor-assets generate --android
-        continue-on-error: true
-
+      - uses: actions/checkout@v4
+      
+      - run: npm install
+      - run: npm install -g @ionic/cli
+      - run: ionic build --prod
+      - run: npx cap sync android
+      
       - name: Build APK
         run: |
           cd android
           chmod +x ./gradlew
-          ./gradlew assembleDebug --no-daemon --stacktrace
-        env:
-          ANDROID_HOME: /usr/local/lib/android/sdk
-          ANDROID_SDK_ROOT: /usr/local/lib/android/sdk
-
-      - name: Upload APK
-        uses: actions/upload-artifact@v4
+          ./gradlew assembleDebug
+          
+      - uses: actions/upload-artifact@v4
         with:
-          name: EVOLIX-APK
+          name: EVOLIX-APK-Docker
           path: android/app/build/outputs/apk/debug/*.apk
-          if-no-files-found: error
