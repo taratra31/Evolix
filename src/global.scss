@@ -41,7 +41,7 @@ ion-header {
 }
 
 ion-content {
-  --padding-top: env(safe-area-inset-top, 0px);
+  --padding-top: 80px !important; 
 }
 .custom-toast {
   --background: rgba(0, 0, 0, 0.9);
