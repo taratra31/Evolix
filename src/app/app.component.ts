@@ -2,6 +2,7 @@ import { Component, CUSTOM_ELEMENTS_SCHEMA, OnInit, OnDestroy } from '@angular/c
 import { IonApp, IonRouterOutlet } from '@ionic/angular/standalone';
 import { Router } from '@angular/router';
 import { Platform } from '@ionic/angular/standalone';
+import { StatusBar, Style } from '@capacitor/status-bar';
 
 @Component({
   selector: 'app-root',
@@ -26,7 +27,24 @@ export class AppComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    this.platform.ready().then(() => {
+    this.platform.ready().then(async () => { // Nampiana async eto
+      
+      /* --- FANAMBOARANA STATUS BAR --- */
+      try {
+        // Ataovy fotsy ny soratry ny StatusBar (ora, batterie) satria mainty ny app
+        await StatusBar.setStyle({ style: Style.Dark });
+        
+        // Ity no tena zava-dehibe: 
+        // overlay: false midika hoe "manome toerana" ny StatusBar ka midina kely ny app-nao
+        await StatusBar.setOverlaysWebView({ overlay: false });
+        
+        // Raha tiana ho mainty tanteraka ny lokon'ny bar any ambony
+        await StatusBar.setBackgroundColor({ color: '#000000' });
+      } catch (e) {
+        console.log('StatusBar non disponible sur web browser');
+      }
+      /* ------------------------------- */
+
       this.checkSession();
       this.initInactivityTimer();
       this.setupEventListeners();

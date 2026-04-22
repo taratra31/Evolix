@@ -41,8 +41,7 @@
 /* ETO NO NANOMBOKA NY FANAMBOARANA */
 
 :root {
-  /* Force-eo ho 0 ny safe area raha mihantona ambony loatra ilay izy */
-  --ion-safe-area-top: 0px !important;
+--ion-safe-area-top: env(safe-area-inset-top, 20px) !important;
 }
 
 html, body {
