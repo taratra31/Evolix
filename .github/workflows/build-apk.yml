@@ -148,5 +148,5 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: EVOLIX-APK
-          path: android/app/build/outputs/apk/debug/Evolix.apk
+          path: android/app/build/outputs/apk/debug/EVOLIX.apk
           if-no-files-found: error
