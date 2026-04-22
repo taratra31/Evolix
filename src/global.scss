@@ -34,15 +34,37 @@
 
 /* @import "@ionic/angular/css/palettes/dark.always.css"; */
 /* @import "@ionic/angular/css/palettes/dark.class.css"; */
+/* ... (ireo @import rehetra teo aloha teo ambony avelao eo foana) ... */
+
 @import '@ionic/angular/css/palettes/dark.system.css';
-/* Custom Toast */
-ion-header {
-  padding-top: env(safe-area-inset-top, 20px);
+
+/* ETO NO NANOMBOKA NY FANAMBOARANA */
+
+:root {
+  /* Force-eo ho 0 ny safe area raha mihantona ambony loatra ilay izy */
+  --ion-safe-area-top: 0px !important;
 }
 
-// ion-content {
-//   --padding-top: 80px !important; 
-// }
+html, body {
+  height: 100% !important;
+  width: 100% !important;
+  overflow: hidden; /* Mba tsy hihantona ny layout */
+  background-color: #000; /* Mba ho mainty ny ambadika raha misy fotsy mipoitra */
+}
+
+ion-content {
+  /* Manaisotra ny padding manelingelina rehefa mipoitra ny keyboard */
+  --keyboard-offset: 0px !important;
+  --offset-bottom: 0px !important;
+  height: 100% !important;
+}
+
+/* Esory ilay padding-top: env(...) teo raha io no manoseka ny lohany ho ambany loatra */
+ion-header {
+  padding-top: 0px !important; 
+}
+
+/* Custom Toast sy Alert (Avelao ireto fa efa mety) */
 .custom-toast {
   --background: rgba(0, 0, 0, 0.9);
   --border-radius: 16px;
@@ -54,7 +76,7 @@ ion-header {
     font-weight: 500;
   }
 }
-/* Custom Alert */
+
 .custom-alert {
   --background: rgba(20, 20, 28, 0.95);
   --backdrop-opacity: 0.7;
@@ -66,8 +88,6 @@ ion-header {
   }
   
   .alert-head {
-    background: transparent;
-    
     .alert-title {
       color: #f3d078;
       font-size: 18px;
@@ -80,23 +100,8 @@ ion-header {
     font-size: 13px;
   }
   
-  .alert-button-group {
-    .alert-button {
-      color: #f3d078;
-      font-weight: 600;
-    }
-  }
-}
-
-/* Custom Toast */
-.custom-toast {
-  --background: rgba(0, 0, 0, 0.9);
-  --border-radius: 16px;
-  --box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
-  --button-color: #f3d078;
-  
-  &::part(message) {
-    font-size: 13px;
-    font-weight: 500;
+  .alert-button-group .alert-button {
+    color: #f3d078;
+    font-weight: 600;
   }
 }

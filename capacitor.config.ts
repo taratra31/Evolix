@@ -6,9 +6,9 @@ const config: CapacitorConfig = {
   webDir: 'www',
   plugins: {
     Keyboard: {
-      resize: 'body',       
+      resize: 'none', // Ovaina 'none' mba tsy hanosika ny content mihitsy
       style: 'dark',         
-      resizeOnFullScreen: true
+      resizeOnFullScreen: false // Ataovy false mba tsy hisy espace fotsy
     }
   }
 };

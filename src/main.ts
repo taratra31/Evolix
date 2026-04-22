@@ -7,7 +7,13 @@ import { AppComponent } from './app/app.component';
 bootstrapApplication(AppComponent, {
   providers: [
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
-    provideIonicAngular(),
+    
+    // Amboary eto ny configuration
+    provideIonicAngular({
+      scrollAssist: true,      // Manampy ny input hiseho eo ambonin'ny klavier
+      scrollPadding: true,     // Manampy espace ahafahana mikorisa (scroll)
+      inputBlurring: false     // Miaro ny focus an'ilay input
+    }),
     
     provideRouter(routes, withPreloading(PreloadAllModules)),
   ],
