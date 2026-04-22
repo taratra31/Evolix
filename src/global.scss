@@ -25,14 +25,38 @@
 @import '@ionic/angular/css/palettes/dark.system.css';
 
 /* ================================================ */
-/* 🎯 SAFE AREA 80px (PRO FIX) */
+/* 🎯 STATUS BAR 80px - PRO FIX (Tsara indrindra) */
 /* ================================================ */
 
 :root {
-  --ion-safe-area-top: 80px;        /* 80px ambony */
+  --status-bar-height: 80px;
+  --ion-safe-area-top: var(--status-bar-height);
   --ion-safe-area-bottom: env(safe-area-inset-bottom, 20px);
   --ion-safe-area-start: env(safe-area-inset-start, 0px);
   --ion-safe-area-end: env(safe-area-inset-end, 0px);
+}
+
+/* 🔥 STATUS BAR ZONE (Background 80px ambony) */
+.status-bar-zone-pro {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 80px;
+  background: #0a0a0f;
+  z-index: 10000;
+  pointer-events: none;
+}
+
+/* Gradient line ambany */
+.status-bar-zone-pro::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(243, 208, 120, 0.3), transparent);
 }
 
 /* Manerena ny html & body */
@@ -41,64 +65,67 @@ html, body {
   width: 100% !important;
   margin: 0 !important;
   padding: 0 !important;
+  background: #0a0a0f;
 }
 
-/* 🔥 ZAVA-DEHIBE: Manampy padding 80px amin'ny atiny rehetra */
+/* 🔥 ION-CONTENT: Tsy manao padding double */
 ion-content {
-  --padding-top: 80px !important;
+  --padding-top: 0px !important;
   --padding-bottom: 20px !important;
   --padding-start: 16px !important;
   --padding-end: 16px !important;
-  --offset-top: 80px !important;
+  --offset-top: 0px !important;
   --offset-bottom: 0px !important;
 }
 
-/* Ho an'ny scroll content */
+/* Ny scroll content no manome ny padding 80px (tokony io ihany) */
 ion-content::part(scroll) {
   padding-top: 80px !important;
+  padding-bottom: 100px !important;
 }
 
-/* Ho an'ny header raha misy */
+/* 🔥 ION-HEADER fanitsiana */
 ion-header {
+  margin-top: 0px !important;
   padding-top: 0px !important;
 }
 
 ion-header ion-toolbar:first-of-type {
-  padding-top: 80px !important;
-  margin-top: 0 !important;
+  margin-top: 80px !important;
+  padding-top: 0 !important;
 }
 
-/* Ho an'ny page tsirairay */
+/* 🔥 ION-PAGE */
 ion-page {
-  --padding-top: 80px !important;
+  --padding-top: 0px !important;
 }
 
-/* Ho an'ny modal */
+/* 🔥 MODAL sy POPOVER */
 ion-modal {
-  --padding-top: 80px !important;
+  --padding-top: 0px !important;
 }
 
-/* Ho an'ny popover */
+ion-modal ion-content::part(scroll) {
+  padding-top: 80px !important;
+}
+
 ion-popover {
-  --padding-top: 80px !important;
+  --padding-top: 0px !important;
 }
 
-/* Ho an'ny tab bar ambany */
+/* 🔥 TAB BAR */
 ion-tab-bar {
   padding-bottom: var(--ion-safe-area-bottom, 20px) !important;
   margin-bottom: 0 !important;
+  background: rgba(10, 10, 15, 0.95) !important;
+  backdrop-filter: blur(10px);
 }
 
-/* Mba tsy hanampy padding fanampiny ny Ionic */
+/* 🔥 ION-ROUTER-OUTLET */
 ion-router-outlet, 
 ion-nav, 
 ion-tabs {
   --padding-top: 0px !important;
-}
-
-/* Esory ny padding rehetra mety ho avy any an-kafa */
-* {
-  -webkit-tap-highlight-color: transparent;
 }
 
 /* Spacer ho an'ny page tsy mampiasa ion-content */
@@ -107,9 +134,14 @@ ion-tabs {
   min-height: 100vh;
 }
 
-/* ------------------------------------------------- */
+/* Esory ny padding rehetra mety ho avy any an-kafa */
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* ================================================ */
 /* STYLE FANAMPINY HO AN'NY APP */
-/* ------------------------------------------------- */
+/* ================================================ */
 
 /* Toast custom */
 .custom-toast {
@@ -164,21 +196,15 @@ ion-tabs {
   background: rgba(243, 208, 120, 0.5);
   border-radius: 10px;
 }
-/* ================================================ */
-/* 🔥 FANAMPINY FARANY HO AN'NY TABS SY SCROLL */
-/* ================================================ */
 
-/* Fanerena ny scroll ho an'ny page misy tabs */
-ion-router-outlet + ion-tabs ion-content {
-  --padding-bottom: 130px !important;
-}
-
-/* Ataovy azo antoka fa misy toerana ambany */
-ion-content::part(scroll) {
-  padding-bottom: 100px !important;
-}
-
-/* Esory ny overflow hidden mety hanakana */
-ion-content .inner-scroll {
-  overflow-y: auto !important;
+/* Loading custom */
+ion-loading.custom-loading {
+  --background: rgba(0, 0, 0, 0.8);
+  --spinner-color: #f3d078;
+  
+  .loading-wrapper {
+    background: linear-gradient(135deg, #1a1a1f, #0d0d12);
+    border-radius: 24px;
+    border: 1px solid rgba(243, 208, 120, 0.2);
+  }
 }

@@ -4,20 +4,40 @@ const config: CapacitorConfig = {
   appId: 'mg.evolix.app',
   appName: 'EVOLIX',
   webDir: 'www',
+  
+  server: {
+    androidScheme: 'https',
+    cleartext: false,
+    allowNavigation: ['localhost']
+  },
+  
   plugins: {
     Keyboard: {
-      resize: 'none',
+      resize: 'body',
       style: 'dark',
-      resizeOnFullScreen: false
+      resizeOnFullScreen: true
     },
     StatusBar: {
-      overlaysWebView: true,
+      overlaysWebView: false,  // Tsy hiditra ao ambany status bar
       style: 'LIGHT',
-      backgroundColor: '#000000'
+      backgroundColor: '#0a0a0f'
+    },
+    SplashScreen: {
+      launchShowDuration: 1000,
+      launchAutoHide: true,
+      backgroundColor: "#0a0a0f",
+      androidSplashResourceName: "splash",
+      androidScaleType: "CENTER_CROP",
+      showSpinner: false,
+      splashFullScreen: true,
+      splashImmersive: true
     }
   },
+  
   android: {
-    allowMixedContent: true
+    allowMixedContent: true,
+    captureInput: true,
+    webContentsDebuggingEnabled: false
   }
 };
 

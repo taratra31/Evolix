@@ -25,30 +25,84 @@ export class AppComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.platform.ready().then(async () => {
       
-      /* --- 🔥 FANAMBOARANA STATUS BAR (PRO 80px) --- */
+      /* --- 🔥 FANAMBOARANA STATUS BAR (80px ambony) --- */
       try {
-        // 🔥 overlay: true = ny CSS no mifehy ny padding (80px)
-        await StatusBar.setOverlaysWebView({ overlay: true });
+        // overlay: false -> ny app tsy hiditra ao anaty status bar
+        await StatusBar.setOverlaysWebView({ overlay: false });
         
-        // Ataovy maivana ny soratry ny StatusBar (ora, batterie)
+        // Ataovy maivana ny soratry ny StatusBar (ora, batterie, signal)
         await StatusBar.setStyle({ style: Style.Light });
         
-        // Ataovy mainty ny lokon'ny bar any ambony
-        await StatusBar.setBackgroundColor({ color: '#000000' });
+        // Ataovy mainty ny lokon'ny status bar
+        await StatusBar.setBackgroundColor({ color: '#0a0a0f' });
         
-        // 🔥 Fanerena mivantana ny padding 80px
+        // 🔥 Manome padding 80px ho an'ny page rehetra
         document.documentElement.style.setProperty('--ion-safe-area-top', '80px');
+        document.documentElement.style.setProperty('--status-bar-height', '80px');
         
-        // Manery ny ion-content rehetra
+        // Manampy CSS style ho an'ny status bar zone
+        const style = document.createElement('style');
+        style.textContent = `
+          /* Status bar zone 80px */
+          .status-bar-zone-pro {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 80px;
+            background: #0a0a0f;
+            z-index: 10000;
+            pointer-events: none;
+          }
+          
+          .status-bar-zone-pro::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(243, 208, 120, 0.3), transparent);
+          }
+          
+          /* Fanerena ny padding ho an'ny ion-content rehetra */
+          ion-content {
+            --padding-top: 80px !important;
+            --offset-top: 80px !important;
+          }
+          
+          ion-content .scroll-content {
+            margin-top: 80px !important;
+            padding-top: 0 !important;
+          }
+          
+          ion-header {
+            margin-top: 80px !important;
+          }
+          
+          /* Ny animated background dia manomboka ambany 80px */
+          .animated-bg {
+            top: 80px !important;
+            height: calc(100% - 80px) !important;
+          }
+        `;
+        document.head.appendChild(style);
+        
+        // Mamorona ny status bar zone
+        const statusBarZone = document.createElement('div');
+        statusBarZone.className = 'status-bar-zone-pro';
+        document.body.insertBefore(statusBarZone, document.body.firstChild);
+        
+        // Manery ny ion-content rehetra efa misy
         setTimeout(() => {
           const contents = document.querySelectorAll('ion-content');
-          contents.forEach((content: any) => {
-            content.style.setProperty('--padding-top', '80px');
-            content.style.setProperty('--offset-top', '80px');
+          contents.forEach((content: HTMLElement) => {
+            content.style.setProperty('--padding-top', '80px', 'important');
+            content.style.setProperty('--offset-top', '80px', 'important');
           });
         }, 100);
         
-        console.log('✅ StatusBar: overlay=true, padding top = 80px');
+        console.log('✅ StatusBar: 80px padding applied successfully');
       } catch (e) {
         console.log('⚠️ StatusBar non disponible sur web browser');
       }
@@ -63,6 +117,12 @@ export class AppComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.clearInactivityTimer();
     this.removeEventListeners();
+    
+    // Manala ny status bar zone
+    const statusBarZone = document.querySelector('.status-bar-zone-pro');
+    if (statusBarZone) {
+      statusBarZone.remove();
+    }
   }
 
   checkSession() {
@@ -114,21 +174,21 @@ export class AppComponent implements OnInit, OnDestroy {
 
   setupEventListeners() {
     if (typeof window !== 'undefined') {
-      window.addEventListener('click', () => this.resetInactivityTimer());
-      window.addEventListener('touchstart', () => this.resetInactivityTimer());
-      window.addEventListener('scroll', () => this.resetInactivityTimer());
-      window.addEventListener('keypress', () => this.resetInactivityTimer());
-      window.addEventListener('mousemove', () => this.resetInactivityTimer());
+      window.addEventListener('click', this.resetInactivityTimer.bind(this));
+      window.addEventListener('touchstart', this.resetInactivityTimer.bind(this));
+      window.addEventListener('scroll', this.resetInactivityTimer.bind(this));
+      window.addEventListener('keypress', this.resetInactivityTimer.bind(this));
+      window.addEventListener('mousemove', this.resetInactivityTimer.bind(this));
     }
   }
 
   removeEventListeners() {
     if (typeof window !== 'undefined') {
-      window.removeEventListener('click', () => this.resetInactivityTimer());
-      window.removeEventListener('touchstart', () => this.resetInactivityTimer());
-      window.removeEventListener('scroll', () => this.resetInactivityTimer());
-      window.removeEventListener('keypress', () => this.resetInactivityTimer());
-      window.removeEventListener('mousemove', () => this.resetInactivityTimer());
+      window.removeEventListener('click', this.resetInactivityTimer.bind(this));
+      window.removeEventListener('touchstart', this.resetInactivityTimer.bind(this));
+      window.removeEventListener('scroll', this.resetInactivityTimer.bind(this));
+      window.removeEventListener('keypress', this.resetInactivityTimer.bind(this));
+      window.removeEventListener('mousemove', this.resetInactivityTimer.bind(this));
     }
   }
 
