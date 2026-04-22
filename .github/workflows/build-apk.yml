@@ -27,8 +27,9 @@ jobs:
       - name: Build Web App
         run: ionic build --prod
 
-      - name: Add Android Platform (RAHA TSY MISY)
+      - name: Prepare Android Platform
         run: |
+          rm -rf android/
           npx cap add android
           npx cap sync android
 
