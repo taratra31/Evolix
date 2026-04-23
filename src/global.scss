@@ -1,75 +1,238 @@
 /* ================================================ */
-/* ✅ SAFE AREA (CORRECT VERSION) */
+/* 🔥 GLOBAL STYLES - EVOLIX PRO                     */
 /* ================================================ */
 
+/* 1. Variables globales */
 :root {
-  --ion-safe-area-top: env(safe-area-inset-top);
-  --ion-safe-area-bottom: env(safe-area-inset-bottom);
-  --ion-safe-area-start: env(safe-area-inset-left);
-  --ion-safe-area-end: env(safe-area-inset-right);
+  --evolix-gold: #f3d078;
+  --evolix-gold-light: #ffe5a3;
+  --evolix-gold-dark: #e6b422;
+  --evolix-dark: #0a0a0f;
+  --evolix-dark-light: #1a1a2a;
+  --evolix-success: #4ade80;
+  --evolix-danger: #ff4757;
+  --evolix-warning: #ffa502;
+  --evolix-info: #70a1ff;
+  
+  --ion-background-color: #0a0a0f;
+  --ion-background-color-rgb: 10,10,15;
+  --ion-text-color: #ffffff;
+  --ion-text-color-rgb: 255,255,255;
+  --ion-border-color: rgba(243,208,120,0.1);
 }
 
-/* Reset propre */
-html, body {
-  height: 100%;
-  width: 100%;
-  margin: 0;
-  padding: 0;
+/* 2. StatusBar padding ho an'ny iOS */
+.ios .ion-page {
+  padding-top: constant(safe-area-inset-top);
+  padding-top: env(safe-area-inset-top);
 }
 
-/* Ionic no mitantana ny espace */
-ion-content {
-  --padding-top: var(--ion-safe-area-top);
-  --padding-bottom: var(--ion-safe-area-bottom);
-  --padding-start: 16px;
-  --padding-end: 16px;
+/* 3. Animation globales */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
-/* Scroll content */
-ion-content::part(scroll) {
-  padding-top: var(--ion-safe-area-top);
-  padding-bottom: var(--ion-safe-area-bottom);
+@keyframes slideInRight {
+  from { opacity: 0; transform: translateX(20px); }
+  to { opacity: 1; transform: translateX(0); }
 }
 
-/* Header */
-ion-header ion-toolbar:first-of-type {
-  padding-top: var(--ion-safe-area-top);
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
 }
 
-/* Tabs ambany */
-ion-tab-bar {
-  padding-bottom: var(--ion-safe-area-bottom);
+/* 4. Classes utilitaires globales */
+.fade-in {
+  animation: fadeIn 0.3s ease-out;
 }
 
-/* Raha tsy mampiasa ion-content */
-.page-container {
-  padding-top: var(--ion-safe-area-top);
-  min-height: 100vh;
+.slide-in {
+  animation: slideInRight 0.4s ease-out;
 }
 
-/* ================================================ */
-/* 🎨 STYLE FANAMPINY (tsy miova) */
-/* ================================================ */
-
-.custom-toast {
-  --background: rgba(0, 0, 0, 0.9);
-  --border-radius: 16px;
-  --box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
-  --button-color: #f3d078;
+.gold-text {
+  color: var(--evolix-gold) !important;
 }
 
-.custom-alert {
-  --background: rgba(20, 20, 28, 0.95);
-  --backdrop-opacity: 0.7;
-  --border-radius: 24px;
+.gold-gradient {
+  background: linear-gradient(135deg, var(--evolix-gold), var(--evolix-gold-dark));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
+.glass-effect {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(243, 208, 120, 0.1);
+}
+
+/* 5. Scrollbar personnalisé (Webkit) */
 ::-webkit-scrollbar {
   width: 4px;
-  background: transparent;
+  height: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(243, 208, 120, 0.5);
+  background: var(--evolix-gold);
   border-radius: 10px;
+  
+  &:hover {
+    background: var(--evolix-gold-light);
+  }
+}
+
+/* 6. Selection text */
+::selection {
+  background: var(--evolix-gold);
+  color: #000;
+}
+
+::-moz-selection {
+  background: var(--evolix-gold);
+  color: #000;
+}
+
+/* 7. Loading spinner global */
+.evolix-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid rgba(243, 208, 120, 0.1);
+  border-top-color: var(--evolix-gold);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* 8. Toast notifications personnalisées */
+.evolix-toast {
+  --background: linear-gradient(135deg, #1a1a2a, #0a0a0f);
+  --color: #fff;
+  --border-color: var(--evolix-gold);
+  --border-radius: 16px;
+  --border-style: solid;
+  --border-width: 1px;
+  --box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+  --button-color: var(--evolix-gold);
+  
+  &.success {
+    --background: linear-gradient(135deg, #064e3b, #065f46);
+  }
+  
+  &.warning {
+    --background: linear-gradient(135deg, #78350f, #92400e);
+  }
+  
+  &.danger {
+    --background: linear-gradient(135deg, #7f1d1d, #991b1b);
+  }
+}
+
+/* 9. Modal styles globales */
+.evolix-modal {
+  --background: linear-gradient(135deg, #1e1e2a, #14141c);
+  --border-radius: 24px;
+  --border-color: rgba(243, 208, 120, 0.2);
+  --border-style: solid;
+  --border-width: 1px;
+  
+  &::part(content) {
+    backdrop-filter: blur(20px);
+  }
+}
+
+/* 10. Input styles globales */
+.evolix-input {
+  --background: rgba(255, 255, 255, 0.05);
+  --color: #fff;
+  --placeholder-color: #888;
+  --placeholder-opacity: 0.7;
+  --padding-start: 16px;
+  --padding-end: 16px;
+  --border-radius: 12px;
+  --border-color: rgba(243, 208, 120, 0.2);
+  --border-style: solid;
+  --border-width: 1px;
+  --highlight-color-focused: var(--evolix-gold);
+  
+  &.item-has-focus {
+    --border-color: var(--evolix-gold);
+    --background: rgba(243, 208, 120, 0.05);
+  }
+}
+
+/* 11. Button styles globales */
+.evolix-button {
+  --background: linear-gradient(135deg, var(--evolix-gold), var(--evolix-gold-dark));
+  --background-activated: linear-gradient(135deg, var(--evolix-gold-dark), var(--evolix-gold));
+  --background-hover: linear-gradient(135deg, var(--evolix-gold-light), var(--evolix-gold));
+  --color: #000;
+  --color-activated: #000;
+  --border-radius: 12px;
+  --box-shadow: 0 4px 12px rgba(243, 208, 120, 0.2);
+  font-weight: 700;
+  text-transform: none;
+  letter-spacing: 0.5px;
+  
+  &.button-outline {
+    --background: transparent;
+    --color: var(--evolix-gold);
+    --border-color: var(--evolix-gold);
+    --border-width: 1.5px;
+    --box-shadow: none;
+  }
+}
+
+/* 12. Card styles globales */
+.evolix-card {
+  --background: linear-gradient(135deg, rgba(30, 30, 42, 0.95), rgba(20, 20, 28, 0.98));
+  --color: #fff;
+  --border-radius: 24px;
+  --border-color: rgba(243, 208, 120, 0.15);
+  --border-style: solid;
+  --border-width: 1px;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+}
+
+/* 13. Safe area padding */
+.safe-padding {
+  padding: constant(safe-area-inset-top) constant(safe-area-inset-right) 
+           constant(safe-area-inset-bottom) constant(safe-area-inset-left);
+  padding: env(safe-area-inset-top) env(safe-area-inset-right) 
+           env(safe-area-inset-bottom) env(safe-area-inset-left);
+}
+
+/* 14. Fix ho an'ny floating elements */
+.ion-page {
+  justify-content: flex-start;
+}
+
+ion-content {
+  --padding-top: 0;
+  --padding-bottom: 0;
+  
+  &::part(scroll) {
+    padding-top: 0;
+  }
+}
+
+/* 15. Amboary ny tab bar default (raha misy) */
+ion-tab-bar {
+  --background: linear-gradient(135deg, rgba(20, 20, 25, 0.95), rgba(10, 10, 12, 0.98));
+  --color: #888;
+  --color-selected: var(--evolix-gold);
+  --border: none;
+  border-top: 1px solid rgba(243, 208, 120, 0.1);
 }

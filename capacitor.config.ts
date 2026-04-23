@@ -8,36 +8,31 @@ const config: CapacitorConfig = {
   server: {
     androidScheme: 'http',
     cleartext: true,
-    allowNavigation: []
+    allowNavigation: ['*']
   },
 
   plugins: {
     Keyboard: {
       resize: 'body',
-      style: 'dark',
+      style: 'DARK',
       resizeOnFullScreen: true
     },
+    
+    // 🔥 StatusBar SEULEMENT - Configuration izay tsy hidiran'ny contenu
     StatusBar: {
-      overlaysWebView: false,
+      overlaysWebView: false,        // ZAVA-DEHIBE: Tsy hi-overlay
       style: 'LIGHT',
       backgroundColor: '#0a0a0f'
-    },
-    SplashScreen: {
-      launchShowDuration: 1000,
-      launchAutoHide: true,
-      backgroundColor: "#0a0a0f",
-      androidSplashResourceName: "splash",
-      androidScaleType: "CENTER_CROP",
-      showSpinner: false,
-      splashFullScreen: false,
-      splashImmersive: false
     }
+    
+    // ❌ TSY MISY SplashScreen intsony
   },
 
   android: {
     allowMixedContent: true,
     captureInput: true,
-    webContentsDebuggingEnabled: false
+    webContentsDebuggingEnabled: false,
+    backgroundColor: '#0a0a0f'
   }
 };
 
