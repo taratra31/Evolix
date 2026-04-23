@@ -15,8 +15,7 @@ import {
   checkmarkCircleOutline, timeOutline, linkOutline,
   imageOutline, starOutline, helpCircleOutline,
   calendarOutline, walletOutline, diamondOutline,
-  giftOutline, checkmarkCircle
-} from 'ionicons/icons';
+  giftOutline, checkmarkCircle, informationCircleOutline } from 'ionicons/icons';
 
 import { SupabaseService } from '../../services/supabase/supabase.service';
 import { TacheService } from '../../services/tache/tache.service';
@@ -45,13 +44,7 @@ export class TachePage implements OnInit {
     private tacheService: TacheService,
     public router: Router
   ) {
-    addIcons({
-      logoFacebook, logoYoutube, logoTiktok,
-      checkmarkCircleOutline, timeOutline, linkOutline,
-      imageOutline, starOutline, helpCircleOutline,
-      calendarOutline, walletOutline, diamondOutline,
-      giftOutline, checkmarkCircle
-    });
+    addIcons({informationCircleOutline,logoFacebook,logoYoutube,logoTiktok,checkmarkCircleOutline,timeOutline,linkOutline,imageOutline,starOutline,helpCircleOutline,calendarOutline,walletOutline,diamondOutline,giftOutline,checkmarkCircle});
   }
 
   async ngOnInit() {

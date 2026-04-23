@@ -42,14 +42,7 @@ export class UtilisateurPage implements OnInit {
     private loadingCtrl: LoadingController,
     private adminService: AdminService
   ) {
-    addIcons({
-      arrowBackOutline, peopleOutline, diamondOutline,
-      walletOutline, giftOutline, eyeOutline, searchOutline,
-      personCircleOutline, trashOutline, starOutline, createOutline,
-      refreshOutline, filterOutline, closeCircleOutline, checkmarkCircleOutline,
-      lockClosedOutline, lockOpenOutline, addOutline, removeOutline,
-      callOutline, keyOutline, copyOutline, mailOutline, calendarOutline
-    });
+    addIcons({arrowBackOutline,refreshOutline,filterOutline,peopleOutline,diamondOutline,walletOutline,searchOutline,closeCircleOutline,personCircleOutline,callOutline,keyOutline,copyOutline,createOutline,calendarOutline,lockClosedOutline,mailOutline,giftOutline,eyeOutline,lockOpenOutline,starOutline,trashOutline,checkmarkCircleOutline,addOutline,removeOutline});
   }
 
   async ngOnInit() {

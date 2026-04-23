@@ -1,192 +1,69 @@
-/*
- * App Global CSS
- * ----------------------------------------------------------------------------
- */
-
-/* Core CSS required for Ionic components to work properly */
-@import "@ionic/angular/css/core.css";
-
-/* Basic CSS for apps built with Ionic */
-@import "@ionic/angular/css/normalize.css";
-@import "@ionic/angular/css/structure.css";
-@import "@ionic/angular/css/typography.css";
-@import "@ionic/angular/css/display.css";
-
-/* Optional CSS utils that can be commented out */
-@import "@ionic/angular/css/padding.css";
-@import "@ionic/angular/css/float-elements.css";
-@import "@ionic/angular/css/text-alignment.css";
-@import "@ionic/angular/css/text-transformation.css";
-@import "@ionic/angular/css/flex-utils.css";
-
-/**
- * Ionic Dark Mode
- */
-@import '@ionic/angular/css/palettes/dark.system.css';
-
 /* ================================================ */
-/* 🎯 STATUS BAR 80px - PRO FIX (Tsara indrindra) */
+/* ✅ SAFE AREA (CORRECT VERSION) */
 /* ================================================ */
 
 :root {
-  --status-bar-height: 80px;
-  --ion-safe-area-top: var(--status-bar-height);
-  --ion-safe-area-bottom: env(safe-area-inset-bottom, 20px);
-  --ion-safe-area-start: env(safe-area-inset-start, 0px);
-  --ion-safe-area-end: env(safe-area-inset-end, 0px);
+  --ion-safe-area-top: env(safe-area-inset-top);
+  --ion-safe-area-bottom: env(safe-area-inset-bottom);
+  --ion-safe-area-start: env(safe-area-inset-left);
+  --ion-safe-area-end: env(safe-area-inset-right);
 }
 
-/* 🔥 STATUS BAR ZONE (Background 80px ambony) */
-.status-bar-zone-pro {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 80px;
-  background: #0a0a0f;
-  z-index: 10000;
-  pointer-events: none;
-}
-
-/* Gradient line ambany */
-.status-bar-zone-pro::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(243, 208, 120, 0.3), transparent);
-}
-
-/* Manerena ny html & body */
+/* Reset propre */
 html, body {
-  height: 100% !important;
-  width: 100% !important;
-  margin: 0 !important;
-  padding: 0 !important;
-  background: #0a0a0f;
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
 }
 
-/* 🔥 ION-CONTENT: Tsy manao padding double */
+/* Ionic no mitantana ny espace */
 ion-content {
-  --padding-top: 0px !important;
-  --padding-bottom: 20px !important;
-  --padding-start: 16px !important;
-  --padding-end: 16px !important;
-  --offset-top: 0px !important;
-  --offset-bottom: 0px !important;
+  --padding-top: var(--ion-safe-area-top);
+  --padding-bottom: var(--ion-safe-area-bottom);
+  --padding-start: 16px;
+  --padding-end: 16px;
 }
 
-/* Ny scroll content no manome ny padding 80px (tokony io ihany) */
+/* Scroll content */
 ion-content::part(scroll) {
-  padding-top: 80px !important;
-  padding-bottom: 100px !important;
+  padding-top: var(--ion-safe-area-top);
+  padding-bottom: var(--ion-safe-area-bottom);
 }
 
-/* 🔥 ION-HEADER fanitsiana */
-ion-header {
-  margin-top: 0px !important;
-  padding-top: 0px !important;
-}
-
+/* Header */
 ion-header ion-toolbar:first-of-type {
-  margin-top: 80px !important;
-  padding-top: 0 !important;
+  padding-top: var(--ion-safe-area-top);
 }
 
-/* 🔥 ION-PAGE */
-ion-page {
-  --padding-top: 0px !important;
-}
-
-/* 🔥 MODAL sy POPOVER */
-ion-modal {
-  --padding-top: 0px !important;
-}
-
-ion-modal ion-content::part(scroll) {
-  padding-top: 80px !important;
-}
-
-ion-popover {
-  --padding-top: 0px !important;
-}
-
-/* 🔥 TAB BAR */
+/* Tabs ambany */
 ion-tab-bar {
-  padding-bottom: var(--ion-safe-area-bottom, 20px) !important;
-  margin-bottom: 0 !important;
-  background: rgba(10, 10, 15, 0.95) !important;
-  backdrop-filter: blur(10px);
+  padding-bottom: var(--ion-safe-area-bottom);
 }
 
-/* 🔥 ION-ROUTER-OUTLET */
-ion-router-outlet, 
-ion-nav, 
-ion-tabs {
-  --padding-top: 0px !important;
-}
-
-/* Spacer ho an'ny page tsy mampiasa ion-content */
+/* Raha tsy mampiasa ion-content */
 .page-container {
-  padding-top: 80px !important;
+  padding-top: var(--ion-safe-area-top);
   min-height: 100vh;
 }
 
-/* Esory ny padding rehetra mety ho avy any an-kafa */
-* {
-  -webkit-tap-highlight-color: transparent;
-}
-
 /* ================================================ */
-/* STYLE FANAMPINY HO AN'NY APP */
+/* 🎨 STYLE FANAMPINY (tsy miova) */
 /* ================================================ */
 
-/* Toast custom */
 .custom-toast {
   --background: rgba(0, 0, 0, 0.9);
   --border-radius: 16px;
   --box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
   --button-color: #f3d078;
-  
-  &::part(message) {
-    font-size: 13px;
-    font-weight: 500;
-  }
 }
 
-/* Alert custom */
 .custom-alert {
   --background: rgba(20, 20, 28, 0.95);
   --backdrop-opacity: 0.7;
   --border-radius: 24px;
-  
-  .alert-wrapper {
-    background: linear-gradient(135deg, #1a1a1f, #0d0d12);
-    border: 1px solid rgba(243, 208, 120, 0.2);
-  }
-  
-  .alert-head {
-    .alert-title {
-      color: #f3d078;
-      font-size: 18px;
-      font-weight: 800;
-    }
-  }
-  
-  .alert-message {
-    color: #ccc;
-    font-size: 13px;
-  }
-  
-  .alert-button-group .alert-button {
-    color: #f3d078;
-    font-weight: 600;
-  }
 }
 
-/* Scrollbar soso-kevitra */
 ::-webkit-scrollbar {
   width: 4px;
   background: transparent;
@@ -195,16 +72,4 @@ ion-tabs {
 ::-webkit-scrollbar-thumb {
   background: rgba(243, 208, 120, 0.5);
   border-radius: 10px;
-}
-
-/* Loading custom */
-ion-loading.custom-loading {
-  --background: rgba(0, 0, 0, 0.8);
-  --spinner-color: #f3d078;
-  
-  .loading-wrapper {
-    background: linear-gradient(135deg, #1a1a1f, #0d0d12);
-    border-radius: 24px;
-    border: 1px solid rgba(243, 208, 120, 0.2);
-  }
 }

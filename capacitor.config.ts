@@ -4,13 +4,13 @@ const config: CapacitorConfig = {
   appId: 'mg.evolix.app',
   appName: 'EVOLIX',
   webDir: 'www',
-  
+
   server: {
-    androidScheme: 'https',
-    cleartext: false,
-    allowNavigation: ['localhost']
+    androidScheme: 'http',
+    cleartext: true,
+    allowNavigation: []
   },
-  
+
   plugins: {
     Keyboard: {
       resize: 'body',
@@ -18,7 +18,7 @@ const config: CapacitorConfig = {
       resizeOnFullScreen: true
     },
     StatusBar: {
-      overlaysWebView: false,  // Tsy hiditra ao ambany status bar
+      overlaysWebView: false,
       style: 'LIGHT',
       backgroundColor: '#0a0a0f'
     },
@@ -29,11 +29,11 @@ const config: CapacitorConfig = {
       androidSplashResourceName: "splash",
       androidScaleType: "CENTER_CROP",
       showSpinner: false,
-      splashFullScreen: true,
-      splashImmersive: true
+      splashFullScreen: false,
+      splashImmersive: false
     }
   },
-  
+
   android: {
     allowMixedContent: true,
     captureInput: true,
