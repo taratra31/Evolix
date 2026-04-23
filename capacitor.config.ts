@@ -13,26 +13,26 @@ const config: CapacitorConfig = {
 
   plugins: {
     Keyboard: {
-      resize: 'body',
+      resize: 'none',           // 🔥 OVAY HO 'none' - Tsy hanova ny taille du contenu
       style: 'DARK',
       resizeOnFullScreen: true
     },
     
-    // 🔥 StatusBar SEULEMENT - Configuration izay tsy hidiran'ny contenu
     StatusBar: {
-      overlaysWebView: false,        // ZAVA-DEHIBE: Tsy hi-overlay
+      overlaysWebView: false,
       style: 'LIGHT',
       backgroundColor: '#0a0a0f'
     }
-    
-    // ❌ TSY MISY SplashScreen intsony
   },
 
   android: {
     allowMixedContent: true,
     captureInput: true,
     webContentsDebuggingEnabled: false,
-    backgroundColor: '#0a0a0f'
+    backgroundColor: '#0a0a0f',
+    
+    // 🔥 Ampio ity mba tsy hisy espace fotsy
+    webContentsDebuggingEnabled: false
   }
 };
 
