@@ -1,9 +1,7 @@
 import { Component, CUSTOM_ELEMENTS_SCHEMA, OnInit, OnDestroy } from '@angular/core';
 import { IonApp, IonRouterOutlet } from '@ionic/angular/standalone';
-import { Router, NavigationEnd } from '@angular/router';
+import { Router } from '@angular/router';
 import { Platform } from '@ionic/angular/standalone';
-import { StatusBar, Style } from '@capacitor/status-bar';
-import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-root',
@@ -16,76 +14,28 @@ import { filter } from 'rxjs/operators';
 export class AppComponent implements OnInit, OnDestroy {
   
   private inactivityTimer: any;
-  private readonly INACTIVITY_TIME = 30 * 60 * 1000; // 30 minitra
+  private readonly INACTIVITY_TIME = 30 * 60 * 1000; // 🔥 30 minitra (ovaina raha tiana)
+  // 5 * 60 * 1000 = 5 minitra
+  // 10 * 60 * 1000 = 10 minitra
+  // 30 * 60 * 1000 = 30 minitra
+  // 60 * 60 * 1000 = 1 ora
 
   constructor(
     private router: Router,
     private platform: Platform
   ) {}
 
-  async ngOnInit() {
-    await this.platform.ready();
-    
-    // 🔥 Amboary ny StatusBar
-    await this.setupStatusBar();
-    
-    // 🔥 Araho ny navigation hanovana style StatusBar
-    this.trackNavigation();
-    
-    // 🔥 Jereo session
-    this.checkSession();
-    
-    // 🔥 Atombohy ny inactivity timer
-    this.initInactivityTimer();
-    this.setupEventListeners();
+  ngOnInit() {
+    this.platform.ready().then(() => {
+      this.checkSession();
+      this.initInactivityTimer();
+      this.setupEventListeners();
+    });
   }
 
   ngOnDestroy() {
     this.clearInactivityTimer();
     this.removeEventListeners();
-  }
-
-  // 🔥 Configuration StatusBar - TSY HIDITRA CONTENU
-  async setupStatusBar() {
-    try {
-      // ZAVA-DEHIBE: Aza avela hi-overlay ny StatusBar
-      await StatusBar.setOverlaysWebView({ overlay: false });
-      
-      // Mametraha background color
-      await StatusBar.setBackgroundColor({ color: '#0a0a0f' });
-      
-      // Asehoy ny StatusBar
-      await StatusBar.show();
-    } catch (error) {
-      console.warn('StatusBar not available on web:', error);
-    }
-  }
-
-  // 🔥 Araho ny navigation
-  trackNavigation() {
-    this.router.events.pipe(
-      filter(event => event instanceof NavigationEnd)
-    ).subscribe((event: any) => {
-      this.updateStatusBarStyle(event.url);
-    });
-  }
-
-  // 🔥 Havaozy ny style StatusBar arakaraka ny page
-  async updateStatusBarStyle(url: string) {
-    try {
-      // Pages misy background maizina - StatusBar texte mazava
-      if (url.includes('/login') || url.includes('/forgot-pass')) {
-        await StatusBar.setStyle({ style: Style.Light });
-        await StatusBar.setBackgroundColor({ color: '#000000' });
-      } 
-      // Pages hafa - StatusBar texte maizina (na mazava arakaraka)
-      else {
-        await StatusBar.setStyle({ style: Style.Light });
-        await StatusBar.setBackgroundColor({ color: '#0a0a0f' });
-      }
-    } catch (error) {
-      console.warn('Error updating StatusBar:', error);
-    }
   }
 
   // 🔥 Jereo raha efa nisy session teo aloha
@@ -96,19 +46,20 @@ export class AppComponent implements OnInit, OnDestroy {
     
     if (userId) {
       if (rememberMe === 'true') {
-        this.router.navigateByUrl('/tabs/acceuil');
+        // Session mandrakizay
+        this.router.navigateByUrl('/tabs/compte');
       } else if (sessionExpiry) {
         const expiryDate = new Date(sessionExpiry);
         const now = new Date();
         
         if (expiryDate > now) {
-          this.router.navigateByUrl('/tabs/acceuil');
+          this.router.navigateByUrl('/tabs/compte');
         } else {
           this.clearSession();
           this.router.navigateByUrl('/login');
         }
       } else {
-        this.router.navigateByUrl('/tabs/acceuil');
+        this.router.navigateByUrl('/tabs/compte');
       }
     }
   }
@@ -123,8 +74,10 @@ export class AppComponent implements OnInit, OnDestroy {
 
   // 🔥 Mamerina ny timer isaky ny misy hetsika
   resetInactivityTimer() {
+    // Raha tsy mbola login ny utilisateur, aza manao timer
     const userId = localStorage.getItem('userId');
     if (!userId) return;
+    
     this.initInactivityTimer();
   }
 
@@ -133,12 +86,13 @@ export class AppComponent implements OnInit, OnDestroy {
     const userId = localStorage.getItem('userId');
     if (userId) {
       console.log('⏰ Inactivity detected - Auto logout');
+      this.showToast('Session expirée pour inactivité', 'warning');
       this.clearSession();
       this.router.navigateByUrl('/login');
     }
   }
 
-  // 🔥 Manangana event listeners
+  // 🔥 Manangana event listeners (click, touch, scroll, keypress)
   setupEventListeners() {
     if (typeof window !== 'undefined') {
       window.addEventListener('click', () => this.resetInactivityTimer());
@@ -176,5 +130,10 @@ export class AppComponent implements OnInit, OnDestroy {
     localStorage.removeItem('userIsAdmin');
     localStorage.removeItem('sessionExpiry');
     localStorage.removeItem('rememberMe');
+  }
+
+  async showToast(message: string, color: string) {
+    
+    console.log(message);
   }
 }
